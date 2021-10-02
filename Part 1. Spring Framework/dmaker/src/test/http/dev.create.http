@@ -1,0 +1,14 @@
+### Send POST request with json body
+POST http://localhost:8080/create-developers
+Content-Type: application/json
+
+{
+  "developerLevel": "JUNIOR",
+  "developerSkillType": "BACK_END",
+  "experienceYears": 2,
+  "memberId": "Mini",
+  "name": "Mouse",
+  "age": 20
+}
+
+### Request 프로퍼티에 맞춘다.
