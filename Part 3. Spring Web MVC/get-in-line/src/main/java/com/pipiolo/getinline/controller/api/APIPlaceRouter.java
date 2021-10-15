@@ -16,7 +16,7 @@ import static org.springframework.web.servlet.function.RouterFunctions.route;
  * -> 가독성 Good
  */
 
-@Configuration
+//@Configuration
 public class APIPlaceRouter {
 
     @Bean
