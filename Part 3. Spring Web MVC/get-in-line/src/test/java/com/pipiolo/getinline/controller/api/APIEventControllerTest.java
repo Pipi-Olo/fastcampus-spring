@@ -3,20 +3,27 @@ package com.pipiolo.getinline.controller.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pipiolo.getinline.constant.ErrorCode;
 import com.pipiolo.getinline.constant.EventStatus;
-import com.pipiolo.getinline.constant.PlaceType;
+import com.pipiolo.getinline.dto.EventDTO;
 import com.pipiolo.getinline.dto.EventRequest;
-import com.pipiolo.getinline.dto.PlaceRequest;
+import com.pipiolo.getinline.service.EventService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -27,6 +34,10 @@ class APIEventControllerTest {
 
     private final MockMvc mvc;
     private final ObjectMapper mapper;
+
+    @MockBean private EventService eventService;
+    // Bean 주입과 UnitTest를 위해 MockBean 사용
+    // 이렇게 안 하면, Service와 묶여서 작동함 -> Service 가 불량이면 Controller도 에러남
 
     public APIEventControllerTest(
             @Autowired MockMvc mvc,
@@ -40,14 +51,22 @@ class APIEventControllerTest {
     @Test
     void givenNothing_whenRequestingEvents_thenReturnsListOfEventsInStandardResponse() throws Exception {
         // Given
+        given(eventService.getEvents(any(), any(), any(), any(), any())).willReturn(List.of(createEventDTO()));
 
         // When & Then
-        mvc.perform(get("/api/events"))
+        mvc.perform(
+                get("/api/events")
+                        .queryParam("placeId", "1")
+                        .queryParam("eventName", "운동")
+                        .queryParam("eventStatus", EventStatus.OPENED.name())
+                        .queryParam("eventStartDateTime", "2021-01-01T00:00:00")
+                        .queryParam("eventEndDateTime", "2021-01-02T00:00:00")
+        )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data").isArray())
                 .andExpect(jsonPath("$.data[0].placeId").value(1L))
-                .andExpect(jsonPath("$.data[0].eventName").value("eventName"))
+                .andExpect(jsonPath("$.data[0].eventName").value("오후 운동"))
                 .andExpect(jsonPath("$.data[0].eventStatus").value(EventStatus.OPENED.name()))
                 .andExpect(jsonPath("$.data[0].eventStartDateTime").value(LocalDateTime
                         .of(2021, 1, 1, 13, 0, 0)
@@ -55,12 +74,14 @@ class APIEventControllerTest {
                 .andExpect(jsonPath("$.data[0].eventEndDateTime").value(LocalDateTime
                         .of(2021, 1, 1, 16, 0, 0)
                         .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-                .andExpect(jsonPath("$.data[0].currentNumberOfPeople").value(10))
-                .andExpect(jsonPath("$.data[0].capacity").value(100))
-                .andExpect(jsonPath("$.data[0].memo").value("testMemo"))
+                .andExpect(jsonPath("$.data[0].currentNumberOfPeople").value(0))
+                .andExpect(jsonPath("$.data[0].capacity").value(24))
+                .andExpect(jsonPath("$.data[0].memo").value("마스크 꼭 착용하세요"))
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+
+        then(eventService).should().getEvents(any(), any(), any(), any(), any());
     }
 
     @DisplayName("[API][POST] 이벤트 생성")
@@ -69,33 +90,38 @@ class APIEventControllerTest {
         // Given
         EventRequest eventRequest = EventRequest.of(
                 1L,
-                "testEventName",
+                "오후 운동",
                 EventStatus.OPENED,
                 LocalDateTime.of(2021, 1, 1, 13, 0, 0),
                 LocalDateTime.of(2021, 1, 1, 16, 0, 0),
-                10,
-                100,
-                "testEventMemo"
+                0,
+                24,
+                "마스크 꼭 착용하세요"
         );
+
+        given(eventService.createEvent(any())).willReturn(true);
 
         // When & Then
         mvc.perform(
-                        post("/api/events")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(eventRequest))
-                )
+                post("/api/events")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(eventRequest))
+        )
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+
+        verify(eventService).createEvent(any());
     }
 
     @DisplayName("[API][GET] 단일 이벤트 조회 - 이벤트 있는 경우")
     @Test
-    void givenEventAndItsId_whenRequestingEvent_thenReturnsEventInStandardResponse() throws Exception {
+    void givenEventId_whenRequestingExistentEvent_thenReturnsEventInStandardResponse() throws Exception {
         // Given
-        int eventId = 1;
+        Long eventId = 1L;
+        given(eventService.getEvent(eventId)).willReturn(Optional.of(createEventDTO()));
 
         // When & Then
         mvc.perform(get("/api/events/" + eventId))
@@ -103,7 +129,7 @@ class APIEventControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data").isMap())
                 .andExpect(jsonPath("$.data.placeId").value(1L))
-                .andExpect(jsonPath("$.data.eventName").value("eventName"))
+                .andExpect(jsonPath("$.data.eventName").value("오후 운동"))
                 .andExpect(jsonPath("$.data.eventStatus").value(EventStatus.OPENED.name()))
                 .andExpect(jsonPath("$.data.eventStartDateTime").value(LocalDateTime
                         .of(2021, 1, 1, 13, 0, 0)
@@ -111,19 +137,22 @@ class APIEventControllerTest {
                 .andExpect(jsonPath("$.data.eventEndDateTime").value(LocalDateTime
                         .of(2021, 1, 1, 16, 0, 0)
                         .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-                .andExpect(jsonPath("$.data.currentNumberOfPeople").value(10))
-                .andExpect(jsonPath("$.data.capacity").value(100))
-                .andExpect(jsonPath("$.data.memo").value("testMemo"))
+                .andExpect(jsonPath("$.data.currentNumberOfPeople").value(0))
+                .andExpect(jsonPath("$.data.capacity").value(24))
+                .andExpect(jsonPath("$.data.memo").value("마스크 꼭 착용하세요"))
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+
+        verify(eventService).getEvent(eventId);
     }
 
     @DisplayName("[API][GET] 단일 이벤트 조회 - 이벤트 없는 경우")
     @Test
-    void givenEventAndItsId_whenRequestingEvent_thenReturnsEmptyInStandardResponse() throws Exception {
+    void givenEventId_whenRequestingNonexistentEvent_thenReturnsEmptyInStandardResponse() throws Exception {
         // Given
-        int eventId = 2;
+        Long eventId = 2L;
+        given(eventService.getEvent(eventId)).willReturn(Optional.empty());
 
         // When & Then
         mvc.perform(get("/api/events/" + eventId))
@@ -133,6 +162,8 @@ class APIEventControllerTest {
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+
+        verify(eventService).getEvent(eventId);
     }
 
     @DisplayName("[API][PUT] 이벤트 변경")
@@ -141,41 +172,61 @@ class APIEventControllerTest {
         // Given
         Long eventId = 1L;
         EventRequest eventRequest = EventRequest.of(
-                null,
-                "testEventName",
+                1L,
+                "오후 운동",
                 EventStatus.OPENED,
                 LocalDateTime.of(2021, 1, 1, 13, 0, 0),
                 LocalDateTime.of(2021, 1, 1, 16, 0, 0),
-                10,
-                100,
-                "testEventMemo"
+                0,
+                24,
+                "마스크 꼭 착용하세요"
         );
+
+        given(eventService.modifyEvent(eq(eventId), any())).willReturn(true);
 
         // When & Then
         mvc.perform(
-                        put("/api/events/" + eventId)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(eventRequest))
-                )
+                put("/api/events/" + eventId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(eventRequest))
+        )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data").value(Boolean.TRUE.toString()))
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+
+        verify(eventService).modifyEvent(eq(eventId), any());
     }
 
     @DisplayName("[API][DELETE] 이벤트 삭제")
     @Test
-    void givenEventAndItsId_whenDeletingEvent_thenReturnsSuccessfulStandardResponse() throws Exception {
+    void givenEventId_whenDeletingEvent_thenReturnsSuccessfulStandardResponse() throws Exception {
         // Given
         long eventId = 1L;
+        given(eventService.removeEvent(eventId)).willReturn(true);
 
         // When & Then
         mvc.perform(delete("/api/events/" + eventId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data").value(Boolean.TRUE.toString()))
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+    }
+
+    private EventDTO createEventDTO() {
+        return EventDTO.of(
+                1L,
+                "오후 운동",
+                EventStatus.OPENED,
+                LocalDateTime.of(2021, 1, 1, 13, 0, 0),
+                LocalDateTime.of(2021, 1, 1, 16, 0, 0),
+                0,
+                24,
+                "마스크 꼭 착용하세요"
+        );
     }
 }
