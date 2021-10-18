@@ -21,6 +21,25 @@ public record PlaceRequest(
             Integer capacity,
             String memo
     ) {
-        return new PlaceRequest(id, placeType, placeName, address, phoneNumber, capacity, memo);
+        return new PlaceRequest(
+                id,
+                placeType,
+                placeName,
+                address,
+                phoneNumber,
+                capacity,
+                memo
+        );
+    }
+
+    public PlaceDTO toDTO() {
+        return PlaceDTO.of(
+                this.placeType(),
+                this.placeName(),
+                this.address(),
+                this.phoneNumber(),
+                this.capacity(),
+                this.memo()
+        );
     }
 }

@@ -3,14 +3,13 @@ package com.pipiolo.getinline.dto;
 import com.pipiolo.getinline.constant.PlaceType;
 
 public record PlaceDTO(
-    PlaceType placeType,
-    String placeName,
-    String address,
-    String phoneNumber,
-    Integer capacity,
-    String memo
+        PlaceType placeType,
+        String placeName,
+        String address,
+        String phoneNumber,
+        Integer capacity,
+        String memo
 ) {
-
     public static PlaceDTO of(
             PlaceType placeType,
             String placeName,
@@ -19,6 +18,13 @@ public record PlaceDTO(
             Integer capacity,
             String memo
     ) {
-        return new PlaceDTO(placeType, placeName, address, phoneNumber, capacity, memo);
+        return new PlaceDTO(
+                placeType,
+                placeName,
+                address,
+                phoneNumber,
+                capacity,
+                memo
+        );
     }
 }

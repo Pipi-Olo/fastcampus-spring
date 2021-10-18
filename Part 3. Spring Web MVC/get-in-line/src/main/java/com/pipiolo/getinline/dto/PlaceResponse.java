@@ -19,6 +19,27 @@ public record PlaceResponse(
             Integer capacity,
             String memo
     ) {
-        return new PlaceResponse(placeType, placeName, address, phoneNumber, capacity, memo);
+        return new PlaceResponse(
+                placeType,
+                placeName,
+                address,
+                phoneNumber,
+                capacity,
+                memo
+        );
+    }
+
+    public static PlaceResponse from(PlaceDTO placeDTO) {
+        if (placeDTO == null)
+            return null;
+
+        return new PlaceResponse(
+                placeDTO.placeType(),
+                placeDTO.placeName(),
+                placeDTO.address(),
+                placeDTO.phoneNumber(),
+                placeDTO.capacity(),
+                placeDTO.memo()
+        );
     }
 }
