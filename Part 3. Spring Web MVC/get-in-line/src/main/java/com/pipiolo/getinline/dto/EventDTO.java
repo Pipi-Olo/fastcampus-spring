@@ -24,8 +24,14 @@ public record EventDTO(
             Integer capacity,
             String memo
     ) {
-        return new EventDTO(placeId, eventName, eventStatus,
-                eventStartDateTime, eventEndDateTime,
-                currentNumberOfPeople, capacity, memo);
+        return new EventDTO(placeId,
+                eventName,
+                eventStatus,
+                eventStartDateTime,
+                eventEndDateTime,
+                currentNumberOfPeople,
+                capacity,
+                memo
+        );
     }
 }
