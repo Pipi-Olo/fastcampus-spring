@@ -1,69 +1,66 @@
 package com.pipiolo.getinline.controller.api;
 
-import com.pipiolo.getinline.constant.ErrorCode;
 import com.pipiolo.getinline.constant.EventStatus;
 import com.pipiolo.getinline.dto.*;
-import com.pipiolo.getinline.exception.GeneralException;
+import com.pipiolo.getinline.service.EventService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RequestMapping("/api")
 @RestController
 public class APIEventController {
 
+    private final EventService eventService;
+
     @GetMapping("/events")
-    public APIDataResponse<List<EventResponse>> getEvents() throws Exception {
-        return APIDataResponse.of(List.of(EventResponse.of(
-                1L,
-                "eventName",
-                EventStatus.OPENED,
-                LocalDateTime.of(2021, 1, 1, 13, 0, 0),
-                LocalDateTime.of(2021, 1, 1, 16, 0, 0),
-                10,
-                100,
-                "testMemo"
-        )));
+    public APIDataResponse<List<EventResponse>> getEvents(
+            Long placeId,
+            String eventName,
+            EventStatus eventStatus,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDateTime,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDateTime
+    ) {
+        List<EventResponse> response = eventService
+                .getEvents(placeId, eventName, eventStatus, eventStartDateTime, eventEndDateTime)
+                .stream().map(EventResponse::from).toList();
+
+        return APIDataResponse.of(response);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/events")
-    public APIDataResponse<Void> createEvent(@RequestBody EventRequest eventRequest) {
-        return APIDataResponse.empty();
+    public APIDataResponse<String> createEvent(@RequestBody EventRequest eventRequest) {
+        boolean result = eventService.createEvent(eventRequest.toDTO());
+        return APIDataResponse.of(Boolean.toString(result));
     }
 
     @GetMapping("/events/{eventId}")
     public APIDataResponse<EventResponse> getEvent(@PathVariable Long eventId) {
-        if(eventId.equals(2L))
-            return APIDataResponse.of(null);
+        EventResponse response = EventResponse
+                .from(eventService.getEvent(eventId).orElse(null));
 
-        return APIDataResponse.of(EventResponse.of(
-                1L,
-                "eventName",
-                EventStatus.OPENED,
-                LocalDateTime.of(2021, 1, 1, 13, 0, 0),
-                LocalDateTime.of(2021, 1, 1, 16, 0, 0),
-                10,
-                100,
-                "testMemo"
-        ));
+        return APIDataResponse.of(response);
     }
 
     @PutMapping("/events/{eventId}")
-    public APIDataResponse<Void> modifyEvent(
+    public APIDataResponse<String> modifyEvent(
             @PathVariable Long eventId,
             @RequestBody EventRequest eventRequest
     ) {
-        return APIDataResponse.empty();
+        boolean result = eventService.modifyEvent(eventId, eventRequest.toDTO());
+        return APIDataResponse.of(Boolean.toString(result));
     }
 
     @DeleteMapping("/events/{eventId}")
-    public APIDataResponse<Void> removeEvent(@PathVariable Long eventId) {
-        return APIDataResponse.empty();
+    public APIDataResponse<String> removeEvent(@PathVariable Long eventId) {
+        boolean result = eventService.removeEvent(eventId);
+        return APIDataResponse.of(Boolean.toString(result));
     }
 
 }
