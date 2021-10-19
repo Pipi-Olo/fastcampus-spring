@@ -78,7 +78,7 @@ class APIPlaceControllerTest {
     void givenPlace_whenCreatingPlace_thenReturnsSuccessfulStandardResponse() throws Exception {
         // Given
         PlaceRequest placeRequest = PlaceRequest.of(
-                null,
+                1L,
                 PlaceType.COMMON,
                 "placeName",
                 "address",

@@ -1,7 +1,9 @@
 package com.pipiolo.getinline.service;
 
+import com.pipiolo.getinline.constant.ErrorCode;
 import com.pipiolo.getinline.constant.EventStatus;
 import com.pipiolo.getinline.dto.EventDTO;
+import com.pipiolo.getinline.exception.GeneralException;
 import com.pipiolo.getinline.repository.EventRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
