@@ -2,13 +2,17 @@ package com.pipiolo.getinline.dto;
 
 import com.pipiolo.getinline.constant.PlaceType;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 public record PlaceRequest(
-        Long id,
-        PlaceType placeType,
-        String placeName,
-        String address,
-        String phoneNumber,
-        Integer capacity,
+        @NotNull @Positive Long id,
+        @NotNull PlaceType placeType,
+        @NotBlank String placeName,
+        @NotBlank String address,
+        @NotNull String phoneNumber,
+        @NotNull @Positive Integer capacity,
         String memo
 ) {
 

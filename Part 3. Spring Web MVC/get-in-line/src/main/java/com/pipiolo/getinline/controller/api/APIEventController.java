@@ -6,11 +6,15 @@ import com.pipiolo.getinline.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Validated
 @RequiredArgsConstructor
 @RequestMapping("/api")
 @RestController
@@ -20,8 +24,8 @@ public class APIEventController {
 
     @GetMapping("/events")
     public APIDataResponse<List<EventResponse>> getEvents(
-            Long placeId,
-            String eventName,
+            @Positive Long placeId,
+            @Size(min = 2) String eventName,
             EventStatus eventStatus,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDateTime,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDateTime

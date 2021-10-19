@@ -1,17 +1,19 @@
 package com.pipiolo.getinline.dto;
 
 import com.pipiolo.getinline.constant.EventStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public record EventRequest(
-        Long placeId,
-        String eventName,
-        EventStatus eventStatus,
-        LocalDateTime eventStartDateTime,
-        LocalDateTime eventEndDateTime,
-        Integer currentNumberOfPeople,
-        Integer capacity,
+        @NotNull @Positive Long placeId,
+        @NotBlank @Size(min = 2) String eventName,
+        @NotNull EventStatus eventStatus,
+        @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDateTime,
+        @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDateTime,
+        @NotNull @PositiveOrZero Integer currentNumberOfPeople,
+        @NotNull @Positive Integer capacity,
         String memo
 ) {
     public static EventRequest of(

@@ -2,16 +2,20 @@ package com.pipiolo.getinline.controller.api;
 
 import com.pipiolo.getinline.constant.PlaceType;
 import com.pipiolo.getinline.dto.APIDataResponse;
-import com.pipiolo.getinline.dto.PlaceDTO;
 import com.pipiolo.getinline.dto.PlaceRequest;
 import com.pipiolo.getinline.dto.PlaceResponse;
 import com.pipiolo.getinline.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@Validated
 @RequiredArgsConstructor
 @RequestMapping("/api")
 @RestController
@@ -21,10 +25,10 @@ public class APIPlaceController {
 
     @GetMapping("/places")
     public APIDataResponse<List<PlaceResponse>> getPlaces(
-            PlaceType placeType,
-            String placeName,
-            String address,
-            String phoneNumber
+            @NotNull PlaceType placeType,
+            @NotBlank String placeName,
+            @NotBlank String address,
+            @NotBlank String phoneNumber
     ) {
         List<PlaceResponse> response = placeService
                 .getPlaces(placeType, placeName, address, phoneNumber)
@@ -35,7 +39,7 @@ public class APIPlaceController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/places")
-    public APIDataResponse<String> createPlace(@RequestBody PlaceRequest placeRequest) {
+    public APIDataResponse<String> createPlace(@Valid @RequestBody PlaceRequest placeRequest) {
         boolean result = placeService.createPlace(placeRequest.toDTO());
         return APIDataResponse.of(Boolean.toString(result));
     }
