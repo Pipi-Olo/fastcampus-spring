@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@DisplayName("View Controller - Event")
 @WebMvcTest(EventController.class)
 class EventControllerTest {
 
@@ -22,9 +23,9 @@ class EventControllerTest {
         this.mvc = mvc;
     }
 
-    @DisplayName("[view][Get] 이벤트 기본 페이지 요청")
+    @DisplayName("[view][Get] 이벤트 리스트 페이지")
     @Test
-    void givenNothing_whenRequestingEventRootPage_thenReturnsEventIndexPage(@Autowired MockMvc mvc) throws Exception {
+    void givenNothing_whenRequestingEventsPage_thenReturnsEventsPage(@Autowired MockMvc mvc) throws Exception {
         // Given
 
         // When & Then
@@ -32,7 +33,26 @@ class EventControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(content().string(containsString("This is event/index page.")))
-                .andExpect(view().name("event/index"))
-                .andDo(print());
+                .andExpect(view().name("event/index"));
+                //.andExpect(model().hasNoErrors())
+                //.andExpect(model().attributeExists("events"));
+                // andDo(print());
     }
+
+    @DisplayName("[view][Get] 이벤트 세부 정보 페이지")
+    @Test
+    void givenEventId_whenRequestingEventDetailPage_thenReturnsEventDetailPage(@Autowired MockMvc mvc) throws Exception {
+        // Given
+        Long eventId = 1L;
+
+        // When & Then
+        mvc.perform(get("/events/" + eventId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(content().string(containsString("This is event/detail page.")))
+                .andExpect(view().name("event/detail"));
+                // .andDo(print());
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package com.pipiolo.getinline.controller;
 
 import com.pipiolo.getinline.constant.PlaceType;
+import com.pipiolo.getinline.dto.PlaceResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -27,6 +27,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@DisplayName("API Controller - Place")
 @WebMvcTest(APIPlaceController.class)
 class APIPlaceControllerTest {
 
