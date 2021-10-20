@@ -1,13 +1,16 @@
 package com.pipiolo.getinline.repository;
 
 import com.pipiolo.getinline.constant.PlaceType;
+import com.pipiolo.getinline.domain.Event;
+import com.pipiolo.getinline.domain.Place;
 import com.pipiolo.getinline.dto.PlaceDTO;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface PlaceRepository {
-    
+public interface PlaceRepository extends JpaRepository<Place, Long> {
+
     default List<PlaceDTO> findPlaces(
             PlaceType placeType,
             String placeName,
