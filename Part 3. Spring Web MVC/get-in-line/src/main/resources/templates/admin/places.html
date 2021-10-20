@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h1>This is admin/places page.</h1>
+
+<ul>
+  <li>placeType: <span th:text="${placeType} ?: _">?</span></li>
+  <li>placeName: <span th:text="${placeName} ?: _">?</span></li>
+  <li>address: <spaon th:text="${address} ?: _">?</spaon></li>
+</ul>
+
+</body>
+</html>
