@@ -6,6 +6,7 @@ import com.pipiolo.getinline.constant.EventStatus;
 import com.pipiolo.getinline.dto.EventDTO;
 import com.pipiolo.getinline.dto.EventRequest;
 import com.pipiolo.getinline.service.EventService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+@Disabled("REST API 사용으로 API Controller 비활성 상태")
 @DisplayName("API Controller - Event")
 @WebMvcTest(APIEventController.class)
 class APIEventControllerTest {

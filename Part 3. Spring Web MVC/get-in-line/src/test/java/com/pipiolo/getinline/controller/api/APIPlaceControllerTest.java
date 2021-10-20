@@ -8,6 +8,7 @@ import com.pipiolo.getinline.domain.Place;
 import com.pipiolo.getinline.dto.PlaceDTO;
 import com.pipiolo.getinline.dto.PlaceRequest;
 import com.pipiolo.getinline.service.PlaceService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Disabled("REST API 사용으로 API Controller 비활성 상태")
 @DisplayName("API Controller - Place")
 @WebMvcTest(APIPlaceController.class)
 class APIPlaceControllerTest {
