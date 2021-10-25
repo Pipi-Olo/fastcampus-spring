@@ -8,11 +8,13 @@ import com.querydsl.core.types.Predicate;
 import com.pipiolo.getinline.dto.EventDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
+
 
 @RequiredArgsConstructor
 @Service
@@ -20,6 +22,7 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
+    @Transactional(readOnly = true)
     public List<EventDTO> getEvents(Predicate predicate) {
         try {
             return StreamSupport.stream(eventRepository.findAll(predicate).spliterator(), false)
@@ -30,6 +33,7 @@ public class EventService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<EventDTO> getEvents(
             Long placeId,
             String eventName,
@@ -44,6 +48,7 @@ public class EventService {
         }
     }
 
+    @Transactional(readOnly = true)
     public Optional<EventDTO> getEvent(Long eventId) {
         try {
             return eventRepository.findById(eventId).map(EventDTO::of);
@@ -52,6 +57,7 @@ public class EventService {
         }
     }
 
+    @Transactional
     public boolean createEvent(EventDTO eventDTO) {
         try {
             if (eventDTO == null) {
@@ -65,6 +71,7 @@ public class EventService {
         }
     }
 
+    @Transactional
     public boolean modifyEvent(Long eventId, EventDTO dto) {
         try {
             if (eventId == null || dto == null) {
@@ -80,6 +87,7 @@ public class EventService {
         }
     }
 
+    @Transactional
     public boolean removeEvent(Long eventId) {
         try {
             if (eventId == null) {
