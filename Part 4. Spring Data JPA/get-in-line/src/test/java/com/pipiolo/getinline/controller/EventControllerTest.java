@@ -1,6 +1,6 @@
 package com.pipiolo.getinline.controller;
 
-import com.uno.getinline.dto.EventDTO;
+import com.pipiolo.getinline.dto.EventDTO;
 import com.pipiolo.getinline.service.EventService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

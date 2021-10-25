@@ -2,8 +2,8 @@ package com.pipiolo.getinline.controller.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pipiolo.getinline.constant.ErrorCode;
-import com.uno.getinline.dto.AdminRequest;
-import com.uno.getinline.dto.LoginRequest;
+import com.pipiolo.getinline.dto.AdminRequest;
+import com.pipiolo.getinline.dto.LoginRequest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

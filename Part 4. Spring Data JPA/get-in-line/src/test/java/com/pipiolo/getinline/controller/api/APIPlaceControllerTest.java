@@ -3,7 +3,7 @@ package com.pipiolo.getinline.controller.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pipiolo.getinline.constant.ErrorCode;
 import com.pipiolo.getinline.constant.PlaceType;
-import com.uno.getinline.dto.PlaceRequest;
+import com.pipiolo.getinline.dto.PlaceRequest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
