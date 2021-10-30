@@ -1,7 +1,7 @@
 package com.pipiolo.getinline.controller.api;
 
 import com.pipiolo.getinline.constant.PlaceType;
-import com.pipiolo.getinline.dto.APIDataResponse;
+import com.pipiolo.getinline.dto.ApiDataResponse;
 import com.pipiolo.getinline.dto.PlaceRequest;
 import com.pipiolo.getinline.dto.PlaceResponse;
 import org.springframework.http.HttpStatus;
@@ -9,13 +9,22 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Spring Data REST 로 API 를 만들어서 당장 필요가 없어진 컨트롤러.
+ * 우선 deprecated 하고, 향후 사용 방안을 고민해 본다.
+ * 필요에 따라서는 다시 살릴 수도 있음
+ *
+ * @deprecated 0.1.2
+ */
+@Deprecated
 //@RequestMapping("/api")
 //@RestController
-public class APIPlaceController {
+public class ApiPlaceController {
 
     @GetMapping("/places")
-    public APIDataResponse<List<PlaceResponse>> getPlaces() {
-        return APIDataResponse.of(List.of(PlaceResponse.of(
+    public ApiDataResponse<List<PlaceResponse>> getPlaces() {
+        return ApiDataResponse.of(List.of(PlaceResponse.of(
+                1L,
                 PlaceType.COMMON,
                 "랄라배드민턴장",
                 "서울시 강남구 강남대로 1234",
@@ -27,17 +36,18 @@ public class APIPlaceController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/places")
-    public APIDataResponse<Void> createPlace(@RequestBody PlaceRequest placeRequest) {
-        return APIDataResponse.empty();
+    public ApiDataResponse<Void> createPlace(@RequestBody PlaceRequest placeRequest) {
+        return ApiDataResponse.empty();
     }
 
     @GetMapping("/places/{placeId}")
-    public APIDataResponse<PlaceResponse> getPlace(@PathVariable Long placeId) {
+    public ApiDataResponse<PlaceResponse> getPlace(@PathVariable Long placeId) {
         if (placeId.equals(2L)) {
-            return APIDataResponse.empty();
+            return ApiDataResponse.empty();
         }
 
-        return APIDataResponse.of(PlaceResponse.of(
+        return ApiDataResponse.of(PlaceResponse.of(
+                placeId,
                 PlaceType.COMMON,
                 "랄라배드민턴장",
                 "서울시 강남구 강남대로 1234",
@@ -48,16 +58,16 @@ public class APIPlaceController {
     }
 
     @PutMapping("/places/{placeId}")
-    public APIDataResponse<Void> modifyPlace(
+    public ApiDataResponse<Void> modifyPlace(
             @PathVariable Long placeId,
             @RequestBody PlaceRequest placeRequest
     ) {
-        return APIDataResponse.empty();
+        return ApiDataResponse.empty();
     }
 
     @DeleteMapping("/places/{placeId}")
-    public APIDataResponse<Void> removePlace(@PathVariable Long placeId) {
-        return APIDataResponse.empty();
+    public ApiDataResponse<Void> removePlace(@PathVariable Long placeId) {
+        return ApiDataResponse.empty();
     }
 
 }
