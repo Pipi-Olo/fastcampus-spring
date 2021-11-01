@@ -5,6 +5,7 @@ import com.pipiolo.security.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class NoteService {
 
     private final NoteRepository noteRepository;
 
+    @Transactional(readOnly = true)
     public List<Note> findByUser(User user) {
         if (user == null)
             throw new UserNotFoundException();
@@ -24,6 +26,7 @@ public class NoteService {
         return noteRepository.findByUserOrderByIdDesc(user);
     }
 
+    @Transactional
     public Note saveNote(User user, String title, String content) {
         if (user == null)
             throw new UserNotFoundException();
@@ -31,6 +34,7 @@ public class NoteService {
         return noteRepository.save(new Note(title, content, user));
     }
 
+    @Transactional
     public void deleteNote(User user, Long noteId) {
         if (user == null)
             throw new UserNotFoundException();
