@@ -1,5 +1,7 @@
 package com.pipiolo.security.config;
 
+import com.pipiolo.security.filter.StopwatchFilter;
+import com.pipiolo.security.filter.TesterAuthenticationFilter;
 import com.pipiolo.security.user.User;
 import com.pipiolo.security.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
@@ -24,6 +28,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        // add custom filters
+        http.addFilterBefore(
+                new StopwatchFilter(),
+                WebAsyncManagerIntegrationFilter.class
+        );
+
+        http.addFilterBefore(
+                new TesterAuthenticationFilter(this.authenticationManager()),
+                UsernamePasswordAuthenticationFilter.class
+        );
+
         // basic authentication
         http.httpBasic().disable(); // basic authentication filter 비활성화
         // csrf
