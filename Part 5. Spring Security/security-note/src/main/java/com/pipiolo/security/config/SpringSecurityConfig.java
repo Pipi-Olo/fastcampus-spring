@@ -37,9 +37,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 // hello 페이지는 USER 롤을 가진 유저에게만 허용
                 .antMatchers("/note").hasRole("USER")
                 .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/notice").authenticated()
                 .antMatchers(HttpMethod.POST, "/notice").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/notice").hasRole("ADMIN")
-                .anyRequest().authenticated();
+                .anyRequest().authenticated(); // 나머지
         // login
         http.formLogin()
                 .loginPage("/login")
@@ -56,6 +57,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //        정적 리소스 spring security 대상에서 제외
 //        web.ignoring().antMatchers("/images/**", "/css/**");
 //        아래 코드와 같은 코드입니다.
+
+//        permitAll와 같은 결과를 보장한다.
+//        하지만, 다른 것은 permitAll은 모든 필터를 개방하는 것이고
+//        ignoring은 필터 자체를 꺼두는 것 (성능 차이)
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
