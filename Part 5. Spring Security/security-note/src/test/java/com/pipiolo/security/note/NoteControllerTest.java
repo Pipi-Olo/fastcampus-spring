@@ -55,7 +55,7 @@ class NoteControllerTest {
     @Test
     @WithUserDetails(
             value = "user123", // userDetailsService를 통해 가져올 수 있는 유저
-            userDetailsServiceBeanName = "userDetailsService", // UserDetailsService 구현체의 Bean
+            userDetailsServiceBeanName = "userDetailsService", // SpringSecurityConfig class의 UserDetailsService 구현체의 Bean
             setupBefore = TestExecutionEvent.TEST_EXECUTION // 테스트 실행 직전에 유저를 가져온다.
     )
     void getNote_인증있음() throws Exception {
