@@ -1,4 +1,4 @@
-package com.pipiolo.note;
+package com.pipiolo.security;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
