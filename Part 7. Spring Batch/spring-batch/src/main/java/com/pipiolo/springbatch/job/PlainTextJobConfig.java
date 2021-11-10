@@ -1,7 +1,9 @@
 package com.pipiolo.springbatch.job;
 
 import com.pipiolo.springbatch.core.domain.PlainText;
+import com.pipiolo.springbatch.core.domain.ResultText;
 import com.pipiolo.springbatch.core.repository.PlainTextRepository;
+import com.pipiolo.springbatch.core.repository.ResultTextRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -30,7 +32,9 @@ public class PlainTextJobConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
+
     private final PlainTextRepository plainTextRepository;
+    private final ResultTextRepository resultTextRepository;
 
     @Bean("plainTextJob")
     public Job plainTextJob(Step plainTextStep) {
@@ -79,8 +83,9 @@ public class PlainTextJobConfig {
     @Bean
     public ItemWriter<String> plainTextWriter() {
         return items -> {
-          items.forEach(System.out::println);
-            System.out.println("=== chunk is finished");
+            items.forEach(item -> resultTextRepository.save(new ResultText(null, item)));
+//            items.forEach(System.out::println);
+//            System.out.println("=== chunk is finished");
         };
     }
 }
