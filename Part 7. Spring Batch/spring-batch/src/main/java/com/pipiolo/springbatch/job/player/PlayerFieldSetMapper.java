@@ -5,7 +5,7 @@ import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
 
-public class PlayerFiledSetMapper implements FieldSetMapper<PlayerDto> {
+public class PlayerFieldSetMapper implements FieldSetMapper<PlayerDto> {
 
     @Override
     public PlayerDto mapFieldSet(FieldSet fieldSet) throws BindException {
