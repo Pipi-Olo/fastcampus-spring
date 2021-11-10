@@ -24,12 +24,34 @@ public class AdvancedJobConfig {
     private final StepBuilderFactory stepBuilderFactory;
 
     @Bean
-    public Job advancedJob(Step advancedStep) {
+    public Job advancedJob(
+            JobExecutionListener jobExecutionListener,
+            Step advancedStep
+    ) {
         return jobBuilderFactory.get("advancedJob")
                 .incrementer(new RunIdIncrementer())
                 .validator(new LocalDateParameterValidator("targetDate"))
+                .listener(jobExecutionListener)
                 .start(advancedStep)
                 .build();
+    }
+
+    @JobScope
+    @Bean
+    public JobExecutionListener jobExecutionListener() {
+        return new JobExecutionListener() {
+            @Override
+            public void beforeJob(JobExecution jobExecution) {
+                log.info("[JobExecutionListener#beforJob] jobExecution is " + jobExecution.getStatus());
+            }
+
+            @Override
+            public void afterJob(JobExecution jobExecution) {
+                if (jobExecution.getStatus() == BatchStatus.FAILED) {
+                    log.error("[JobExecutionListener#afterJob] jobExecution is FAILED!! RECOVER ASAP");
+                }
+            }
+        };
     }
 
     @JobScope
@@ -45,7 +67,8 @@ public class AdvancedJobConfig {
     public Tasklet advancedTasklet(@Value("#{jobParameters['targetDate']}") String targetDate) {
         return ((contribution, chunkContext) -> {
             log.info("[advancedTasklet] jobParameter - targetDate = " + targetDate);
-            log.info("[advancedTasklet] excuted advancedTasklet");
+            log.info("[advancedTasklet] executed advancedTasklet");
+//            throw new RuntimeException("ERROR!!");
             return RepeatStatus.FINISHED;
         });
     }
