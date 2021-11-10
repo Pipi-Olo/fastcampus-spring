@@ -15,12 +15,19 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.adapter.ItemProcessorAdapter;
 import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
+import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
+import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 
+import javax.xml.stream.FactoryConfigurationError;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @AllArgsConstructor
@@ -43,31 +50,36 @@ public class FlatFileJobConfig {
     public Step flatFileStep(
             FlatFileItemReader<PlayerDto> playerFileItemReader,
 //            ItemProcessor<PlayerDto, PlayerSalaryDto> playerSalaryItemProcessor
-            ItemProcessorAdapter<PlayerDto, PlayerSalaryDto> adapter
+            ItemProcessorAdapter<PlayerDto, PlayerSalaryDto> adapter,
+            FlatFileItemWriter<PlayerSalaryDto> playerFileItemWriter
     ) {
         return stepBuilderFactory.get("flatFileStep")
                 .<PlayerDto, PlayerSalaryDto>chunk(5)
                 .reader(playerFileItemReader)
 //                .processor(playerSalaryItemProcessor)
                 .processor(adapter)
-                .writer(new ItemWriter<>() {
-                    @Override
-                    public void write(List<? extends PlayerSalaryDto> items) throws Exception {
-                        items.forEach(System.out::println);
-                    }
-                })
+                .writer(playerFileItemWriter)
                 .build();
     }
 
     @StepScope
     @Bean
-    public FlatFileItemReader<PlayerDto> playerFileItemReader() {
-        return new FlatFileItemReaderBuilder<PlayerDto>()
-                .name("playerFileItemReader")
-                .lineTokenizer(new DelimitedLineTokenizer())
-                .linesToSkip(1)
-                .fieldSetMapper(new PlayerFiledSetMapper())
-                .resource(new FileSystemResource("player-list.txt"))
+    public FlatFileItemWriter<PlayerSalaryDto> playerFileItemWriter() throws IOException {
+        BeanWrapperFieldExtractor<PlayerSalaryDto> fieldExtractor = new BeanWrapperFieldExtractor<>();
+        fieldExtractor.setNames(new String[]{"ID", "lastName", "firstName", "salary"});
+        fieldExtractor.afterPropertiesSet();
+
+        DelimitedLineAggregator<PlayerSalaryDto> lineAggregator = new DelimitedLineAggregator<>();
+        lineAggregator.setDelimiter("\t");
+        lineAggregator.setFieldExtractor(fieldExtractor);
+
+        new File("player-salary-list.txt").createNewFile();
+        FileSystemResource resource = new FileSystemResource("player-salary-list.txt");
+
+        return new FlatFileItemWriterBuilder<PlayerSalaryDto>()
+                .name("playerFileItemWriter")
+                .resource(resource)
+                .lineAggregator(lineAggregator)
                 .build();
     }
 
@@ -90,7 +102,7 @@ public class FlatFileJobConfig {
     @StepScope
     @Bean
     public ItemProcessor<PlayerDto, PlayerSalaryDto> playerSalaryItemProcessor(
-        PlayerSalaryService playerSalaryService
+            PlayerSalaryService playerSalaryService
     ) {
         return new ItemProcessor<PlayerDto, PlayerSalaryDto>() {
             @Override
@@ -98,5 +110,17 @@ public class FlatFileJobConfig {
                 return playerSalaryService.calcSalary(item);
             }
         };
+    }
+
+    @StepScope
+    @Bean
+    public FlatFileItemReader<PlayerDto> playerFileItemReader() {
+        return new FlatFileItemReaderBuilder<PlayerDto>()
+                .name("playerFileItemReader")
+                .lineTokenizer(new DelimitedLineTokenizer())
+                .linesToSkip(1)
+                .fieldSetMapper(new PlayerFiledSetMapper())
+                .resource(new FileSystemResource("player-list.txt"))
+                .build();
     }
  }

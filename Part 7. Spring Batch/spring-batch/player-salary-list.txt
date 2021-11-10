@@ -1,0 +1,6 @@
+AbduKa00	Abdul-Jabbar	Karim	47000000
+AbduRa00	Abdullah	Rabih	46000000
+AberWa00	Abercrombie	Walter	62000000
+AbraDa00	Abramowicz	Danny	76000000
+AdamBo00	Adams	Bob	75000000
+AdamCh00	Adams	Charlie	42000000
