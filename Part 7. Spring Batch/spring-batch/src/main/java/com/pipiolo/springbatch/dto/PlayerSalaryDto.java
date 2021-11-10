@@ -15,12 +15,12 @@ public class PlayerSalaryDto {
 
     public static PlayerSalaryDto of(PlayerDto playerDto, int salary) {
         PlayerSalaryDto playerSalaryDto = new PlayerSalaryDto();
-        playerSalaryDto.setID(playerSalaryDto.getID());
-        playerSalaryDto.setLastName(playerSalaryDto.getLastName());
-        playerSalaryDto.setFirstName(playerSalaryDto.getFirstName());
-        playerSalaryDto.setPosition(playerSalaryDto.getPosition());
+        playerSalaryDto.setID(playerDto.getID());
+        playerSalaryDto.setLastName(playerDto.getLastName());
+        playerSalaryDto.setFirstName(playerDto.getFirstName());
+        playerSalaryDto.setPosition(playerDto.getPosition());
         playerSalaryDto.setBirthYear(playerDto.getBirthYear());
-        playerSalaryDto.setDebutYear(playerSalaryDto.getDebutYear());
+        playerSalaryDto.setDebutYear(playerDto.getDebutYear());
         playerSalaryDto.setSalary(salary);
 
         return playerSalaryDto;
