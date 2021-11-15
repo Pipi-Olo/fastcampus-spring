@@ -1,6 +1,7 @@
 package com.pipiolo.house.job.lawd;
 
 import com.pipiolo.house.core.entity.Lawd;
+import com.pipiolo.house.core.service.LawdService;
 import com.pipiolo.house.job.validator.FilePathParameterValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,9 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +34,8 @@ public class LawdInsertJobConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
+
+    private final LawdService lawdService;
 
     @Bean
     public Job lawdInsertJob(
@@ -73,11 +78,6 @@ public class LawdInsertJobConfig {
     @StepScope
     @Bean
     public ItemWriter<Lawd> lawdItemWriter() {
-        return new ItemWriter<Lawd>() {
-            @Override
-            public void write(List<? extends Lawd> items) throws Exception {
-                items.forEach(System.out::println);
-            }
-        };
+        return items -> items.forEach(lawdService::upsert);
     }
 }
