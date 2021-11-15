@@ -12,18 +12,13 @@ import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
-import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-
-import java.util.List;
 
 import static com.pipiolo.house.job.lawd.LawdFiledSetMapper.*;
 
@@ -63,7 +58,9 @@ public class LawdInsertJobConfig {
 
     @StepScope
     @Bean
-    public FlatFileItemReader<Lawd> lawdFileItemReader(@Value("#{jobParameters['filePath']}") String filePath) {
+    public FlatFileItemReader<Lawd> lawdFileItemReader(
+            @Value("#{jobParameters['filePath']}") String filePath
+    ) {
         return new FlatFileItemReaderBuilder<Lawd>()
                 .name("lawdFileItemReader")
                 .delimited()
