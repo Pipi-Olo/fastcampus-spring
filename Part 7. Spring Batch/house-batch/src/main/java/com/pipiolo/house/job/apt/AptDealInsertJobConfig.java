@@ -3,6 +3,7 @@ package com.pipiolo.house.job.apt;
 import com.pipiolo.house.adapter.ApartmentApiResource;
 import com.pipiolo.house.core.dto.AptDealDto;
 import com.pipiolo.house.core.repository.LawdRepository;
+import com.pipiolo.house.core.service.AptDealService;
 import com.pipiolo.house.job.validator.LawdCdParameterValidator;
 import com.pipiolo.house.job.validator.YearMonthParameterValidator;
 import lombok.RequiredArgsConstructor;
@@ -43,14 +44,14 @@ public class AptDealInsertJobConfig {
     @Bean
     public Job aptDealInsertJob(
             Step guLawdCdStep,
-            Step contextPrintStep,
+//            Step contextPrintStep,
             Step aptDealInsertStep
     ) {
         return jobBuilderFactory.get("aptDealInsertJob")
                 .incrementer(new RunIdIncrementer())
-//                .validator(aptDealJobParameterValidator())
+                .validator(aptDealJobParameterValidator())
                 .start(guLawdCdStep)
-                .on("CONTINUABLE").to(contextPrintStep).next(guLawdCdStep)
+                .on("CONTINUABLE").to(aptDealInsertStep).next(guLawdCdStep)
                 .from(guLawdCdStep)
                 .on("*").end()
                 .end()
@@ -139,9 +140,10 @@ public class AptDealInsertJobConfig {
 
     @StepScope
     @Bean
-    public ItemWriter<AptDealDto> aptDealWriter() {
+    public ItemWriter<AptDealDto> aptDealWriter(AptDealService service) {
         return items -> {
-            items.forEach(System.out::println);
+            items.forEach(service::upsert);
+            System.out.println("======= Writing Completed =======");
         };
     }
 }
