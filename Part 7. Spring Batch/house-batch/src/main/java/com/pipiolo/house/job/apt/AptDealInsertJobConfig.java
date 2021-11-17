@@ -39,7 +39,6 @@ public class AptDealInsertJobConfig {
     private final StepBuilderFactory stepBuilderFactory;
 
     private final ApartmentApiResource apartmentApiResource;
-    private final LawdRepository lawdRepository;
 
     @Bean
     public Job aptDealInsertJob(
@@ -75,44 +74,11 @@ public class AptDealInsertJobConfig {
                 .build();
     }
 
-    /**
-     * ExecutionContext Data
-     * 1. guLawdCd : 구 코드 -> 다음 스텝에서 사용할 값
-     * 2. guLawdCdList : 구 코드 리스트
-     * 3. itemCount : 남아있는 구 코드 개수
-     */
+
     @StepScope
     @Bean
-    public Tasklet guLawdCdTasklet() {
-        return (contribution, chunkContext) -> {
-            StepExecution stepExecution = chunkContext.getStepContext().getStepExecution();
-            ExecutionContext executionContext = stepExecution.getJobExecution().getExecutionContext();
-
-            List<String> guLawdCdList;
-            if (!executionContext.containsKey("guLawdCdList")) {
-                guLawdCdList = lawdRepository.findDistinctGuLawdCd();
-                executionContext.put("guLawdCdList", guLawdCdList);
-                executionContext.putInt("itemCount", guLawdCdList.size());
-            } else {
-                guLawdCdList = (List<String>) executionContext.get("guLawdCdList");
-            }
-
-            Integer itemCount = executionContext.getInt("itemCount");
-
-            if (itemCount == 0) {
-                contribution.setExitStatus(ExitStatus.COMPLETED);
-                return RepeatStatus.FINISHED;
-            }
-
-            itemCount--;
-
-            String guLawdCd = guLawdCdList.get(itemCount);
-            executionContext.putString("guLawdCd", guLawdCd);
-            executionContext.putInt("itemCount", itemCount);
-
-            contribution.setExitStatus(new ExitStatus("CONTINUABLE"));
-            return RepeatStatus.FINISHED;
-        };
+    public Tasklet guLawdCdTasklet(LawdRepository lawdRepository) {
+        return new GuLawdTasklet(lawdRepository);
     }
 
     @JobScope
