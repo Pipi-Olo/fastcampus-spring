@@ -2,9 +2,12 @@ package com.pipiolo.house.core.dto;
 
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @ToString
 @Getter
@@ -51,8 +54,27 @@ public class AptDealDto {
     private Integer floor;
 
     @XmlElement(name = "해제사유발생일")
-    private String dealCanceledDate;
+    private String dealCanceledDate; // 21.07.03
 
     @XmlElement(name = "해제여부")
-    private String dealCanceled;
+    private String dealCanceled; // O
+
+    public LocalDate getDealDate() {
+        return LocalDate.of(year, month, day);
+    }
+
+    public Long getDealAmount() {
+        return Long.parseLong(dealAmount.replaceAll(",", "").trim());
+    }
+
+    public Boolean getDealCanceled() {
+        return "0".equals(dealCanceled.trim());
+    }
+
+    public LocalDate getDealCanceledDate() {
+        if (dealCanceledDate.isBlank()) {
+            return null;
+        }
+        return LocalDate.parse(dealCanceledDate, DateTimeFormatter.ofPattern("yy.MM.dd"));
+    }
 }
