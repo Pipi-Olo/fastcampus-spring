@@ -32,7 +32,7 @@ public class AptDealService {
     private void saveAptDeal(AptDealDto dto, Apt apt) {
         AptDeal aptDeal = aptDealRepository.findAptDealByAptAndExclusiveAreaAndDealDateAndDealAmountAndFloor(
                         apt, dto.getExclusiveArea(), dto.getDealDate(), dto.getDealAmount(), dto.getFloor())
-                .orElseGet(() -> AptDeal.from(dto, apt));
+                .orElseGet(() -> AptDeal.of(dto, apt));
         aptDeal.setDealCanceled(dto.getDealCanceled());
         aptDeal.setDealCanceledDate(dto.getDealCanceledDate());
 
