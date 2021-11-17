@@ -46,7 +46,7 @@ public class AptDeal {
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
     public static AptDeal from(AptDealDto dto, Apt apt) {
         AptDeal aptDeal = new AptDeal();
