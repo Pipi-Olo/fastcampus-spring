@@ -3,6 +3,7 @@ package com.pipiolo.calendar.core.service;
 import com.pipiolo.calendar.core.domain.entity.User;
 import com.pipiolo.calendar.core.domain.repository.UserRepository;
 import com.pipiolo.calendar.core.dto.UserCreateRequest;
+import com.pipiolo.calendar.core.util.Encryptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+    private final Encryptor encryptor;
     private final UserRepository userRepository;
 
     @Transactional
@@ -25,7 +27,7 @@ public class UserService {
         return userRepository.save(new User(
                 request.getName(),
                 request.getEmail(),
-                request.getPassword(),
+                encryptor.encrypt(request.getPassword()),
                 request.getBirthday()
         ));
     }
@@ -33,6 +35,6 @@ public class UserService {
     @Transactional
     public Optional<User> findPwMatchUser(String email, String password) {
         return userRepository.findByEmail(email)
-                .map(user -> user.getPassword().equals(password) ? user : null);
+                .map(user -> user.isMatch(encryptor, password) ? user : null);
     }
 }

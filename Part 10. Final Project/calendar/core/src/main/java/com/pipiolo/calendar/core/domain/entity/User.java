@@ -1,5 +1,6 @@
 package com.pipiolo.calendar.core.domain.entity;
 
+import com.pipiolo.calendar.core.util.Encryptor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,5 +27,9 @@ public class User extends BaseEntity {
         this.email = email;
         this.password = password;
         this.birthday = birthday;
+    }
+
+    public boolean isMatch(Encryptor encryptor, String password) {
+        return encryptor.isMatch(this.password, password);
     }
 }
