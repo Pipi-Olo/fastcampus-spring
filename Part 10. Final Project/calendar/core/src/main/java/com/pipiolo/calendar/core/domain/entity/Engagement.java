@@ -14,11 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Engagement {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Engagement extends BaseEntity {
 
     @JoinColumn(name = "event_id")
     @ManyToOne
@@ -29,10 +25,4 @@ public class Engagement {
     private User attendee;
 
     private RequestStatus requestStatus;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 }
