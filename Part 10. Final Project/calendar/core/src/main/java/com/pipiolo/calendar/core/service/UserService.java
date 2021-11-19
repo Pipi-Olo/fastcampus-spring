@@ -24,12 +24,12 @@ public class UserService {
                     throw new RuntimeException("user already existed!");
                 });
 
-        return userRepository.save(new User(
-                request.getName(),
-                request.getEmail(),
-                encryptor.encrypt(request.getPassword()),
-                request.getBirthday()
-        ));
+        return userRepository.save(User.builder()
+                .name(request.getName())
+                .password(encryptor.encrypt(request.getPassword()))
+                .email(request.getEmail())
+                .birthday(request.getBirthday())
+                .build());
     }
 
     @Transactional
