@@ -1,17 +1,11 @@
 package com.pipiolo.calendar.core.domain.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
@@ -24,10 +18,10 @@ public class User extends BaseEntity {
 
     private String password;
 
-    private LocalDateTime birthday;
+    private LocalDate birthday;
 
     @Builder
-    public User(String name, String email, String password, LocalDateTime birthday) {
+    public User(String name, String email, String password, LocalDate birthday) {
         this.name = name;
         this.email = email;
         this.password = password;
