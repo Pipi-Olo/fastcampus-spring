@@ -15,11 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
 @Entity
-public class Schedule {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Schedule extends BaseEntity {
 
     private LocalDateTime startAt;
 
@@ -32,12 +28,6 @@ public class Schedule {
     @JoinColumn(name = "writer_id")
     @ManyToOne
     private User writer;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)
     private ScheduleType scheduleType;
