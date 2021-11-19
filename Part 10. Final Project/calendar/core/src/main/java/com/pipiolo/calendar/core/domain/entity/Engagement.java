@@ -1,21 +1,31 @@
-package com.pipiolo.calendar.core.domain;
+package com.pipiolo.calendar.core.domain.entity;
 
+import com.pipiolo.calendar.core.domain.Event;
+import com.pipiolo.calendar.core.domain.RequestStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
+@Entity
 public class Engagement {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Event event;
+    @JoinColumn(name = "event_id")
+    @ManyToOne
+    private Schedule schedule;
 
+    @JoinColumn(name = "attendee_id")
+    @ManyToOne
     private User attendee;
 
     private RequestStatus requestStatus;
@@ -25,11 +35,4 @@ public class Engagement {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
-    @Builder
-    public Engagement(Event event, User attendee, RequestStatus requestStatus) {
-        this.event = event;
-        this.attendee = attendee;
-        this.requestStatus = requestStatus;
-    }
 }

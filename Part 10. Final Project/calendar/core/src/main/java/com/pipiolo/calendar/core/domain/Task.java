@@ -1,10 +1,13 @@
 package com.pipiolo.calendar.core.domain;
 
+import com.pipiolo.calendar.core.domain.entity.Schedule;
+import com.pipiolo.calendar.core.domain.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.scheduling.annotation.Schedules;
 
 import java.time.LocalDateTime;
 
@@ -12,27 +15,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Task {
 
-    private Long id;
+    private Schedule schedule;
 
-    private LocalDateTime taskAt;
-
-    private String title;
-
-    private String description;
-
-    private User writer;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
-
-    @Builder
-    public Task(LocalDateTime taskAt, String title, String description, User writer) {
-        this.taskAt = taskAt;
-        this.title = title;
-        this.description = description;
-        this.writer = writer;
+    public Task(Schedule schedule) {
+        this.schedule = schedule;
     }
 }
