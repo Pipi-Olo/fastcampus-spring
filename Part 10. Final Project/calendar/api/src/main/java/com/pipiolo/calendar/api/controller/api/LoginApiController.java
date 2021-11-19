@@ -15,14 +15,14 @@ import javax.servlet.http.HttpSession;
 @RestController
 public class LoginApiController {
 
-    private LoginService loginService;
+    private final LoginService loginService;
 
     @PostMapping("/api/sign-up")
     public ResponseEntity<Void> signup(
             @RequestBody SignupRequest request,
             HttpSession session
     ) {
-        loginService.signup(request, session);
+         loginService.signup(request, session);
         return ResponseEntity.ok().build();
     }
 
