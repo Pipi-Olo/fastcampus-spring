@@ -24,13 +24,9 @@ public class ScheduleController {
     @PostMapping("/tasks")
     public ResponseEntity<Void> createTask(
             @RequestBody TaskCreateRequest request,
-            HttpSession session
+            AuthUser authUser
     ) {
-        final Long userId = (Long) session.getAttribute(LOGIN_SESSION_KEY);
-        if (userId == null) {
-            throw new RuntimeException("Bad Request. No Session.");
-        }
-        taskService.create(request, AuthUser.of(userId));
+        taskService.create(request, authUser);
         return ResponseEntity.ok().build();
     }
 }
