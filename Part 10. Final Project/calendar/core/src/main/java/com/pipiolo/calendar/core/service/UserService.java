@@ -6,8 +6,7 @@ import com.pipiolo.calendar.core.dto.UserCreateRequest;
 import com.pipiolo.calendar.core.util.Encryptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -36,5 +35,11 @@ public class UserService {
     public Optional<User> findPwMatchUser(String email, String password) {
         return userRepository.findByEmail(email)
                 .map(user -> user.isMatch(encryptor, password) ? user : null);
+    }
+
+    @Transactional
+    public User findByUserId(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("No user by id. "));
     }
 }
