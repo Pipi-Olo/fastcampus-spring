@@ -164,3 +164,6 @@ gradle-app.setting
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+### Docker ###
+docker-compose.yml
