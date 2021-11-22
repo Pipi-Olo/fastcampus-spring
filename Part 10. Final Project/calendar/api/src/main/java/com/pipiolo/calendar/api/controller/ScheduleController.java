@@ -1,7 +1,9 @@
 package com.pipiolo.calendar.api.controller;
 
 import com.pipiolo.calendar.api.dto.AuthUser;
+import com.pipiolo.calendar.api.dto.EventCreateRequest;
 import com.pipiolo.calendar.api.dto.TaskCreateRequest;
+import com.pipiolo.calendar.api.service.EventService;
 import com.pipiolo.calendar.api.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import static com.pipiolo.calendar.api.service.LoginService.LOGIN_SESSION_KEY;
 public class ScheduleController {
 
     private final TaskService taskService;
+    private final EventService eventService;
 
     @PostMapping("/tasks")
     public ResponseEntity<Void> createTask(
@@ -27,6 +30,15 @@ public class ScheduleController {
             AuthUser authUser
     ) {
         taskService.create(request, authUser);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/events")
+    public ResponseEntity<Void> createEvent(
+            @RequestBody EventCreateRequest request,
+            AuthUser authUser
+    ) {
+        eventService.create(request, authUser);
         return ResponseEntity.ok().build();
     }
 }
