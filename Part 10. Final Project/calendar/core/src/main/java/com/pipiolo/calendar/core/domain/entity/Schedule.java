@@ -4,8 +4,6 @@ import com.pipiolo.calendar.core.domain.Event;
 import com.pipiolo.calendar.core.domain.Notification;
 import com.pipiolo.calendar.core.domain.Task;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

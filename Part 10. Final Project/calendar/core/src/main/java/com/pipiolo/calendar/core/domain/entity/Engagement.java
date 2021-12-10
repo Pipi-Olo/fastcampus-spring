@@ -5,15 +5,13 @@ import com.pipiolo.calendar.core.domain.RequestStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@Builder
 public class Engagement extends BaseEntity {
 
     @JoinColumn(name = "event_id")
@@ -24,5 +22,10 @@ public class Engagement extends BaseEntity {
     @ManyToOne
     private User attendee;
 
+    @Enumerated(value = EnumType.STRING)
     private RequestStatus requestStatus;
+
+    public Event getEvent() {
+        return schedule.toEvent();
+    }
 }
