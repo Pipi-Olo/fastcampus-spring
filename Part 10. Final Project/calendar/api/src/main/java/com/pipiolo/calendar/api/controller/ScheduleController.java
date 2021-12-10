@@ -2,8 +2,10 @@ package com.pipiolo.calendar.api.controller;
 
 import com.pipiolo.calendar.api.dto.AuthUser;
 import com.pipiolo.calendar.api.dto.EventCreateRequest;
+import com.pipiolo.calendar.api.dto.NotificationCreateRequest;
 import com.pipiolo.calendar.api.dto.TaskCreateRequest;
 import com.pipiolo.calendar.api.service.EventService;
+import com.pipiolo.calendar.api.service.NotificationService;
 import com.pipiolo.calendar.api.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ public class ScheduleController {
 
     private final TaskService taskService;
     private final EventService eventService;
+    private final NotificationService notificationService;
 
     @PostMapping("/tasks")
     public ResponseEntity<Void> createTask(
@@ -39,6 +42,15 @@ public class ScheduleController {
             AuthUser authUser
     ) {
         eventService.create(request, authUser);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/notifications")
+    public ResponseEntity<Void> createNotification(
+            @RequestBody NotificationCreateRequest request,
+            AuthUser authUser
+    ) {
+        notificationService.create(request, authUser);
         return ResponseEntity.ok().build();
     }
 }
