@@ -18,13 +18,12 @@ public class TaskService {
 
     @Transactional
     public void create(TaskCreateRequest request, AuthUser authUser) {
-        final Schedule taskSchedule =
-                Schedule.task(
-                        request.getTaskAt(),
-                        request.getTitle(),
-                        request.getDescription(),
-                        userService.findByUserId(authUser.getId())
-                );
+        final Schedule taskSchedule = Schedule.task(
+                request.getTaskAt(),
+                request.getTitle(),
+                request.getDescription(),
+                userService.findByUserId(authUser.getId())
+        );
         scheduleRepository.save(taskSchedule);
     }
 }

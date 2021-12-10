@@ -25,7 +25,7 @@ public class AuthUserResolver implements HandlerMethodArgumentResolver {
     ) throws Exception {
         final Long userId = (Long) webRequest.getAttribute(LOGIN_SESSION_KEY, webRequest.SCOPE_SESSION);
         if (userId == null) {
-            throw new RuntimeException("Bad Request. No Seesion.");
+            throw new RuntimeException("Bad Request. No Session.");
         }
         return AuthUser.of(userId);
     }
