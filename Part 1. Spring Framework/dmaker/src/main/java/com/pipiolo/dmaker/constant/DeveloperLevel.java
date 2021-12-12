@@ -1,4 +1,4 @@
-package com.pipiolo.dmaker.type;
+package com.pipiolo.dmaker.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

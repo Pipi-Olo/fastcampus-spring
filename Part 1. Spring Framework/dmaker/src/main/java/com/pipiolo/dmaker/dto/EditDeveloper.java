@@ -1,7 +1,7 @@
 package com.pipiolo.dmaker.dto;
 
-import com.pipiolo.dmaker.type.DeveloperLevel;
-import com.pipiolo.dmaker.type.DeveloperSkillType;
+import com.pipiolo.dmaker.constant.DeveloperLevel;
+import com.pipiolo.dmaker.constant.DeveloperSkillType;
 import lombok.*;
 
 import javax.validation.constraints.Max;
@@ -17,12 +17,6 @@ public class EditDeveloper {
     @Builder
     @ToString
     public static class Request {
-
-        /**
-         * @NotNull, @Min, @Max : data validation
-         *
-         * memberId, name : 수정이 불가능한 property
-         */
 
         @NotNull
         private DeveloperLevel developerLevel;
