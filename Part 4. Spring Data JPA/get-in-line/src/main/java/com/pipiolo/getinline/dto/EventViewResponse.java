@@ -4,9 +4,9 @@ import com.pipiolo.getinline.constant.EventStatus;
 
 import java.time.LocalDateTime;
 
-public record EventResponse(
+public record EventViewResponse(
         Long id,
-        PlaceDTO place,
+        String placeName,
         String eventName,
         EventStatus eventStatus,
         LocalDateTime eventStartDatetime,
@@ -15,10 +15,21 @@ public record EventResponse(
         Integer capacity,
         String memo
 ) {
+    public EventViewResponse(Long id, String placeName, String eventName, EventStatus eventStatus, LocalDateTime eventStartDatetime, LocalDateTime eventEndDatetime, Integer currentNumberOfPeople, Integer capacity, String memo) {
+        this.id = id;
+        this.placeName = placeName;
+        this.eventName = eventName;
+        this.eventStatus = eventStatus;
+        this.eventStartDatetime = eventStartDatetime;
+        this.eventEndDatetime = eventEndDatetime;
+        this.currentNumberOfPeople = currentNumberOfPeople;
+        this.capacity = capacity;
+        this.memo = memo;
+    }
 
-    public static EventResponse of(
+    public static EventViewResponse of(
             Long id,
-            PlaceDTO place,
+            String placeName,
             String eventName,
             EventStatus eventStatus,
             LocalDateTime eventStartDatetime,
@@ -27,9 +38,9 @@ public record EventResponse(
             Integer capacity,
             String memo
     ) {
-        return new EventResponse(
+        return new EventViewResponse(
                 id,
-                place,
+                placeName,
                 eventName,
                 eventStatus,
                 eventStartDatetime,
@@ -40,11 +51,11 @@ public record EventResponse(
         );
     }
 
-    public static EventResponse from(EventDTO eventDTO) {
+    public static EventViewResponse from(EventDTO eventDTO) {
         if (eventDTO == null) { return null; }
-        return EventResponse.of(
+        return EventViewResponse.of(
                 eventDTO.id(),
-                eventDTO.placeDTO(),
+                eventDTO.placeDTO().placeName(),
                 eventDTO.eventName(),
                 eventDTO.eventStatus(),
                 eventDTO.eventStartDatetime(),
@@ -53,14 +64,6 @@ public record EventResponse(
                 eventDTO.capacity(),
                 eventDTO.memo()
         );
-    }
-
-    public static EventResponse empty(PlaceDTO placeDTO) {
-        return EventResponse.of(null, placeDTO, null, null, null, null, null, null, null);
-    }
-
-    public String getPlaceName() {
-        return this.place().placeName();
     }
 
 }

@@ -1,6 +1,6 @@
 package com.pipiolo.getinline.controller.api;
 
-import com.pipiolo.getinline.dto.ApiDataResponse;
+import com.pipiolo.getinline.dto.APIDataResponse;
 import com.pipiolo.getinline.dto.AdminRequest;
 import com.pipiolo.getinline.dto.LoginRequest;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Deprecated
 //@RequestMapping("/api")
 //@RestController
-public class ApiAuthController {
+public class APIAuthController {
 
     @PostMapping("/sign-up")
-    public ApiDataResponse<String> signUp(@RequestBody AdminRequest adminRequest) {
-        return ApiDataResponse.empty();
+    public APIDataResponse<String> signUp(@RequestBody AdminRequest adminRequest) {
+        return APIDataResponse.empty();
     }
 
     @PostMapping("/login")
-    public ApiDataResponse<String> login(@RequestBody LoginRequest loginRequest) {
-        return ApiDataResponse.empty();
+    public APIDataResponse<String> login(@RequestBody LoginRequest loginRequest) {
+        return APIDataResponse.empty();
     }
 
 }

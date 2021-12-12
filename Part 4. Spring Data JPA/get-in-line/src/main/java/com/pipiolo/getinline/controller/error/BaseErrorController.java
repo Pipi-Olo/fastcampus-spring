@@ -1,7 +1,7 @@
 package com.pipiolo.getinline.controller.error;
 
 import com.pipiolo.getinline.constant.ErrorCode;
-import com.pipiolo.getinline.dto.ApiErrorResponse;
+import com.pipiolo.getinline.dto.APIErrorResponse;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,28 +18,38 @@ public class BaseErrorController implements ErrorController {
 
     @RequestMapping(path = "/error", produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView errorHtml(HttpServletResponse response) {
-        HttpStatus status = HttpStatus.valueOf(response.getStatus());
-        ErrorCode errorCode = status.is4xxClientError() ? ErrorCode.BAD_REQUEST : ErrorCode.INTERNAL_ERROR;
+        HttpStatus httpStatus = HttpStatus.valueOf(response.getStatus());
+        ErrorCode errorCode = httpStatus.is4xxClientError() ? ErrorCode.BAD_REQUEST : ErrorCode.INTERNAL_ERROR;
+
+        if (httpStatus == HttpStatus.OK) {
+            httpStatus = HttpStatus.FORBIDDEN;
+            errorCode = ErrorCode.BAD_REQUEST;
+        }
 
         return new ModelAndView(
                 "error",
                 Map.of(
-                        "statusCode", status.value(),
+                        "statusCode", httpStatus.value(),
                         "errorCode", errorCode,
-                        "message", errorCode.getMessage(status.getReasonPhrase())
+                        "message", errorCode.getMessage(httpStatus.getReasonPhrase())
                 ),
-                status
+                httpStatus
         );
     }
 
     @RequestMapping("/error")
-    public ResponseEntity<ApiErrorResponse> error(HttpServletResponse response) {
-        HttpStatus status = HttpStatus.valueOf(response.getStatus());
-        ErrorCode errorCode = status.is4xxClientError() ? ErrorCode.BAD_REQUEST : ErrorCode.INTERNAL_ERROR;
+    public ResponseEntity<APIErrorResponse> error(HttpServletResponse response) {
+        HttpStatus httpStatus = HttpStatus.valueOf(response.getStatus());
+        ErrorCode errorCode = httpStatus.is4xxClientError() ? ErrorCode.BAD_REQUEST : ErrorCode.INTERNAL_ERROR;
+
+        if (httpStatus == HttpStatus.OK) {
+            httpStatus = HttpStatus.FORBIDDEN;
+            errorCode = ErrorCode.BAD_REQUEST;
+        }
 
         return ResponseEntity
-                .status(status)
-                .body(ApiErrorResponse.of(false, errorCode));
+                .status(httpStatus)
+                .body(APIErrorResponse.of(false, errorCode));
     }
 
 }

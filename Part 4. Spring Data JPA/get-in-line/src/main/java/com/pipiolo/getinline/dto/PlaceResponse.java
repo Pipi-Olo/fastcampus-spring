@@ -1,6 +1,7 @@
 package com.pipiolo.getinline.dto;
 
 import com.pipiolo.getinline.constant.PlaceType;
+import com.pipiolo.getinline.dto.PlaceDTO;
 
 public record PlaceResponse(
         Long id,
@@ -24,16 +25,16 @@ public record PlaceResponse(
         return new PlaceResponse(id, placeType, placeName, address, phoneNumber, capacity, memo);
     }
 
-    public static PlaceResponse from(PlaceDto placeDto) {
-        if (placeDto == null) { return null; }
+    public static PlaceResponse from(PlaceDTO placeDTO) {
+        if (placeDTO == null) { return null; }
         return PlaceResponse.of(
-                placeDto.id(),
-                placeDto.placeType(),
-                placeDto.placeName(),
-                placeDto.address(),
-                placeDto.phoneNumber(),
-                placeDto.capacity(),
-                placeDto.memo()
+                placeDTO.id(),
+                placeDTO.placeType(),
+                placeDTO.placeName(),
+                placeDTO.address(),
+                placeDTO.phoneNumber(),
+                placeDTO.capacity(),
+                placeDTO.memo()
         );
     }
 

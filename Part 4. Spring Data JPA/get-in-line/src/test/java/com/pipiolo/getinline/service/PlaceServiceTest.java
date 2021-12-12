@@ -1,11 +1,11 @@
 package com.pipiolo.getinline.service;
 
+import com.pipiolo.getinline.dto.PlaceDTO;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.pipiolo.getinline.constant.ErrorCode;
 import com.pipiolo.getinline.constant.PlaceType;
 import com.pipiolo.getinline.domain.Place;
-import com.pipiolo.getinline.dto.PlaceDto;
 import com.pipiolo.getinline.exception.GeneralException;
 import com.pipiolo.getinline.repository.PlaceRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -42,7 +42,7 @@ class PlaceServiceTest {
                 ));
 
         // When
-        List<PlaceDto> list = sut.getPlaces(new BooleanBuilder());
+        List<PlaceDTO> list = sut.getPlaces(new BooleanBuilder());
 
         // Then
         assertThat(list).hasSize(2);
@@ -75,10 +75,10 @@ class PlaceServiceTest {
         given(placeRepository.findById(placeId)).willReturn(Optional.of(place));
 
         // When
-        Optional<PlaceDto> result = sut.getPlace(placeId);
+        Optional<PlaceDTO> result = sut.getPlace(placeId);
 
         // Then
-        assertThat(result).hasValue(PlaceDto.of(place));
+        assertThat(result).hasValue(PlaceDTO.of(place));
         then(placeRepository).should().findById(placeId);
     }
 
@@ -90,7 +90,7 @@ class PlaceServiceTest {
         given(placeRepository.findById(placeId)).willReturn(Optional.empty());
 
         // When
-        Optional<PlaceDto> result = sut.getPlace(placeId);
+        Optional<PlaceDTO> result = sut.getPlace(placeId);
 
         // Then
         assertThat(result).isEmpty();
@@ -122,7 +122,7 @@ class PlaceServiceTest {
         given(placeRepository.save(any(Place.class))).willReturn(place);
 
         // When
-        boolean result = sut.createPlace(PlaceDto.of(place));
+        boolean result = sut.createPlace(PlaceDTO.of(place));
 
         // Then
         assertThat(result).isTrue();
@@ -151,7 +151,7 @@ class PlaceServiceTest {
         given(placeRepository.save(any())).willThrow(e);
 
         // When
-        Throwable thrown = catchThrowable(() -> sut.createPlace(PlaceDto.of(place)));
+        Throwable thrown = catchThrowable(() -> sut.createPlace(PlaceDTO.of(place)));
 
         // Then
         assertThat(thrown)
@@ -171,7 +171,7 @@ class PlaceServiceTest {
         given(placeRepository.save(changedPlace)).willReturn(changedPlace);
 
         // When
-        boolean result = sut.modifyPlace(placeId, PlaceDto.of(changedPlace));
+        boolean result = sut.modifyPlace(placeId, PlaceDTO.of(changedPlace));
 
         // Then
         assertThat(result).isTrue();
@@ -186,7 +186,7 @@ class PlaceServiceTest {
         Place place = createPlace(PlaceType.SPORTS, "체육관");
 
         // When
-        boolean result = sut.modifyPlace(null, PlaceDto.of(place));
+        boolean result = sut.modifyPlace(null, PlaceDTO.of(place));
 
         // Then
         assertThat(result).isFalse();
@@ -219,7 +219,7 @@ class PlaceServiceTest {
         given(placeRepository.save(any())).willThrow(e);
 
         // When
-        Throwable thrown = catchThrowable(() -> sut.modifyPlace(placeId, PlaceDto.of(wrongPlace)));
+        Throwable thrown = catchThrowable(() -> sut.modifyPlace(placeId, PlaceDTO.of(wrongPlace)));
 
         // Then
         assertThat(thrown)

@@ -1,7 +1,7 @@
 package com.pipiolo.getinline.controller.error;
 
 import com.pipiolo.getinline.constant.ErrorCode;
-import com.pipiolo.getinline.dto.ApiErrorResponse;
+import com.pipiolo.getinline.dto.APIErrorResponse;
 import com.pipiolo.getinline.exception.GeneralException;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice(annotations = {RestController.class, RepositoryRestController.class})
-public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+public class APIExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
@@ -46,7 +46,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> handleExceptionInternal(Exception e, ErrorCode errorCode, HttpHeaders headers, HttpStatus status, WebRequest request) {
         return super.handleExceptionInternal(
                 e,
-                ApiErrorResponse.of(false, errorCode.getCode(), errorCode.getMessage(e)),
+                APIErrorResponse.of(false, errorCode.getCode(), errorCode.getMessage(e)),
                 headers,
                 status,
                 request

@@ -1,7 +1,8 @@
 package com.pipiolo.getinline.controller.api;
 
 import com.pipiolo.getinline.constant.EventStatus;
-import com.pipiolo.getinline.dto.ApiDataResponse;
+import com.pipiolo.getinline.dto.APIDataResponse;
+import com.pipiolo.getinline.dto.APIDataResponse;
 import com.pipiolo.getinline.dto.EventRequest;
 import com.pipiolo.getinline.dto.EventResponse;
 import com.pipiolo.getinline.service.EventService;
@@ -28,12 +29,12 @@ import java.util.List;
 //@Validated
 //@RequestMapping("/api")
 //@RestController
-public class ApiEventController {
+public class APIEventController {
 
     private final EventService eventService;
 
     @GetMapping("/events")
-    public ApiDataResponse<List<EventResponse>> getEvents(
+    public APIDataResponse<List<EventResponse>> getEvents(
             @Positive Long placeId,
             @Size(min = 2) String eventName,
             EventStatus eventStatus,
@@ -48,38 +49,38 @@ public class ApiEventController {
                 eventEndDatetime
         ).stream().map(EventResponse::from).toList();
 
-        return ApiDataResponse.of(eventResponses);
+        return APIDataResponse.of(eventResponses);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/events")
-    public ApiDataResponse<String> createEvent(@Valid @RequestBody EventRequest eventRequest) {
+    public APIDataResponse<String> createEvent(@Valid @RequestBody EventRequest eventRequest) {
         boolean result = eventService.createEvent(eventRequest.toDTO());
 
-        return ApiDataResponse.of(Boolean.toString(result));
+        return APIDataResponse.of(Boolean.toString(result));
     }
 
     @GetMapping("/events/{eventId}")
-    public ApiDataResponse<EventResponse> getEvent(@Positive @PathVariable Long eventId) {
+    public APIDataResponse<EventResponse> getEvent(@Positive @PathVariable Long eventId) {
         EventResponse eventResponse = EventResponse.from(eventService.getEvent(eventId).orElse(null));
 
-        return ApiDataResponse.of(eventResponse);
+        return APIDataResponse.of(eventResponse);
     }
 
     @PutMapping("/events/{eventId}")
-    public ApiDataResponse<String> modifyEvent(
+    public APIDataResponse<String> modifyEvent(
             @Positive @PathVariable Long eventId,
             @Valid @RequestBody EventRequest eventRequest
     ) {
         boolean result = eventService.modifyEvent(eventId, eventRequest.toDTO());
-        return ApiDataResponse.of(Boolean.toString(result));
+        return APIDataResponse.of(Boolean.toString(result));
     }
 
     @DeleteMapping("/events/{eventId}")
-    public ApiDataResponse<String> removeEvent(@Positive @PathVariable Long eventId) {
+    public APIDataResponse<String> removeEvent(@Positive @PathVariable Long eventId) {
         boolean result = eventService.removeEvent(eventId);
 
-        return ApiDataResponse.of(Boolean.toString(result));
+        return APIDataResponse.of(Boolean.toString(result));
     }
 
 }

@@ -7,7 +7,7 @@ import com.pipiolo.getinline.constant.EventStatus;
 import com.pipiolo.getinline.constant.PlaceType;
 import com.pipiolo.getinline.domain.Event;
 import com.pipiolo.getinline.domain.Place;
-import com.pipiolo.getinline.dto.EventDto;
+import com.pipiolo.getinline.dto.EventDTO;
 import com.pipiolo.getinline.exception.GeneralException;
 import com.pipiolo.getinline.repository.EventRepository;
 import com.pipiolo.getinline.repository.PlaceRepository;
@@ -47,7 +47,7 @@ class EventServiceTest {
                 ));
 
         // When
-        List<EventDto> list = sut.getEvents(new BooleanBuilder());
+        List<EventDTO> list = sut.getEvents(new BooleanBuilder());
 
         // Then
         assertThat(list).hasSize(2);
@@ -80,10 +80,10 @@ class EventServiceTest {
         given(eventRepository.findById(eventId)).willReturn(Optional.of(event));
 
         // When
-        Optional<EventDto> result = sut.getEvent(eventId);
+        Optional<EventDTO> result = sut.getEvent(eventId);
 
         // Then
-        assertThat(result).hasValue(EventDto.of(event));
+        assertThat(result).hasValue(EventDTO.of(event));
         then(eventRepository).should().findById(eventId);
     }
 
@@ -95,7 +95,7 @@ class EventServiceTest {
         given(eventRepository.findById(eventId)).willReturn(Optional.empty());
 
         // When
-        Optional<EventDto> result = sut.getEvent(eventId);
+        Optional<EventDTO> result = sut.getEvent(eventId);
 
         // Then
         assertThat(result).isEmpty();
@@ -123,16 +123,16 @@ class EventServiceTest {
     @Test
     void givenEvent_whenCreating_thenCreatesEventAndReturnsTrue() {
         // Given
-        EventDto eventDto = EventDto.of(createEvent("오후 운동", false));
-        given(placeRepository.findById(eventDto.placeDto().id())).willReturn(Optional.of(createPlace()));
+        EventDTO eventDTO = EventDTO.of(createEvent("오후 운동", false));
+        given(placeRepository.findById(eventDTO.placeDTO().id())).willReturn(Optional.of(createPlace()));
         given(eventRepository.save(any(Event.class))).willReturn(any());
 
         // When
-        boolean result = sut.createEvent(eventDto);
+        boolean result = sut.createEvent(eventDTO);
 
         // Then
         assertThat(result).isTrue();
-        then(placeRepository).should().findById(eventDto.placeDto().id());
+        then(placeRepository).should().findById(eventDTO.placeDTO().id());
         then(eventRepository).should().save(any(Event.class));
     }
 
@@ -158,7 +158,7 @@ class EventServiceTest {
         given(placeRepository.findById(event.getPlace().getId())).willReturn(Optional.empty());
 
         // When
-        Throwable thrown = catchThrowable(() -> sut.createEvent(EventDto.of(event)));
+        Throwable thrown = catchThrowable(() -> sut.createEvent(EventDTO.of(event)));
 
         // Then
         assertThat(thrown)
@@ -178,7 +178,7 @@ class EventServiceTest {
         given(eventRepository.save(any())).willThrow(e);
 
         // When
-        Throwable thrown = catchThrowable(() -> sut.createEvent(EventDto.of(event)));
+        Throwable thrown = catchThrowable(() -> sut.createEvent(EventDTO.of(event)));
 
         // Then
         assertThat(thrown)
@@ -199,7 +199,7 @@ class EventServiceTest {
         given(eventRepository.save(changedEvent)).willReturn(changedEvent);
 
         // When
-        boolean result = sut.modifyEvent(eventId, EventDto.of(changedEvent));
+        boolean result = sut.modifyEvent(eventId, EventDTO.of(changedEvent));
 
         // Then
         assertThat(result).isTrue();
@@ -218,7 +218,7 @@ class EventServiceTest {
         Event event = createEvent("오후 운동", false);
 
         // When
-        boolean result = sut.modifyEvent(null, EventDto.of(event));
+        boolean result = sut.modifyEvent(null, EventDTO.of(event));
 
         // Then
         assertThat(result).isFalse();
@@ -251,7 +251,7 @@ class EventServiceTest {
         given(eventRepository.save(any())).willThrow(e);
 
         // When
-        Throwable thrown = catchThrowable(() -> sut.modifyEvent(eventId, EventDto.of(wrongEvent)));
+        Throwable thrown = catchThrowable(() -> sut.modifyEvent(eventId, EventDTO.of(wrongEvent)));
 
         // Then
         assertThat(thrown)
