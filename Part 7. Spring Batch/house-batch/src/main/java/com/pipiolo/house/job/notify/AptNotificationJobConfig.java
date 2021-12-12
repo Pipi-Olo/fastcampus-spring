@@ -1,6 +1,7 @@
 package com.pipiolo.house.job.notify;
 
 import com.pipiolo.house.adapter.FakeSendService;
+import com.pipiolo.house.adapter.RealSendService;
 import com.pipiolo.house.core.dto.AptDto;
 import com.pipiolo.house.core.dto.NotificationDto;
 import com.pipiolo.house.core.entity.AptNotification;
@@ -109,10 +110,12 @@ public class AptNotificationJobConfig {
     @StepScope
     @Bean
     public ItemWriter<NotificationDto> aptNotificationWriter(
-            FakeSendService fakeSendService
+            FakeSendService fakeSendService,
+            RealSendService realSendService
     ) {
         return items -> {
-            items.forEach(item -> fakeSendService.send(item.getEmail(), item.toMessage()));
+//            items.forEach(item -> fakeSendService.send(item.getEmail(), item.toMessage()));
+            items.forEach(item -> realSendService.send(item.getEmail(), item.toMessage()));
         };
     }
 }
