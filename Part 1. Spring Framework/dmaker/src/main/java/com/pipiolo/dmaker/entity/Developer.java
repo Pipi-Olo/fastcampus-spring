@@ -1,8 +1,8 @@
 package com.pipiolo.dmaker.entity;
 
-import com.pipiolo.dmaker.type.DeveloperLevel;
-import com.pipiolo.dmaker.type.DeveloperSkillType;
-import com.pipiolo.dmaker.code.StatusCode;
+import com.pipiolo.dmaker.constant.DeveloperLevel;
+import com.pipiolo.dmaker.constant.DeveloperSkillType;
+import com.pipiolo.dmaker.constant.StatusCode;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;

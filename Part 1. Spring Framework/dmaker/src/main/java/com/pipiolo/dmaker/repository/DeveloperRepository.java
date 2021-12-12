@@ -1,7 +1,7 @@
 package com.pipiolo.dmaker.repository;
 
 import com.pipiolo.dmaker.entity.Developer;
-import com.pipiolo.dmaker.code.StatusCode;
+import com.pipiolo.dmaker.constant.StatusCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

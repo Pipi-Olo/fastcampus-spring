@@ -2,8 +2,8 @@ package com.pipiolo.dmaker.controller;
 
 import com.pipiolo.dmaker.dto.DeveloperDto;
 import com.pipiolo.dmaker.service.DMakerService;
-import com.pipiolo.dmaker.type.DeveloperLevel;
-import com.pipiolo.dmaker.type.DeveloperSkillType;
+import com.pipiolo.dmaker.constant.DeveloperLevel;
+import com.pipiolo.dmaker.constant.DeveloperSkillType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

@@ -1,8 +1,8 @@
 package com.pipiolo.dmaker.dto;
 
 import com.pipiolo.dmaker.entity.Developer;
-import com.pipiolo.dmaker.type.DeveloperLevel;
-import com.pipiolo.dmaker.type.DeveloperSkillType;
+import com.pipiolo.dmaker.constant.DeveloperLevel;
+import com.pipiolo.dmaker.constant.DeveloperSkillType;
 import lombok.*;
 
 import javax.validation.constraints.Max;
@@ -19,10 +19,6 @@ public class CreateDeveloper {
     @Builder
     @ToString
     public static class Request {
-
-        /**
-         * @NotNull, @Min, @Max, @Size : data validation
-         */
 
         @NotNull
         private DeveloperLevel developerLevel;
