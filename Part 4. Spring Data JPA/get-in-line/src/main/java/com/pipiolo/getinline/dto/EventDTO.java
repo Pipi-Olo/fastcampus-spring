@@ -6,9 +6,9 @@ import com.pipiolo.getinline.domain.Place;
 
 import java.time.LocalDateTime;
 
-public record EventDto(
+public record EventDTO(
         Long id,
-        PlaceDto placeDto,
+        PlaceDTO placeDTO,
         String eventName,
         EventStatus eventStatus,
         LocalDateTime eventStartDatetime,
@@ -20,9 +20,9 @@ public record EventDto(
         LocalDateTime modifiedAt
 ) {
 
-    public static EventDto of(
+    public static EventDTO of(
             Long id,
-            PlaceDto placeDto,
+            PlaceDTO placeDTO,
             String eventName,
             EventStatus eventStatus,
             LocalDateTime eventStartDatetime,
@@ -33,9 +33,9 @@ public record EventDto(
             LocalDateTime createdAt,
             LocalDateTime modifiedAt
     ) {
-        return new EventDto(
+        return new EventDTO(
                 id,
-                placeDto,
+                placeDTO,
                 eventName,
                 eventStatus,
                 eventStartDatetime,
@@ -48,10 +48,10 @@ public record EventDto(
         );
     }
 
-    public static EventDto of(Event event) {
-        return new EventDto(
+    public static EventDTO of(Event event) {
+        return new EventDTO(
                 event.getId(),
-                PlaceDto.of(event.getPlace()),
+                PlaceDTO.of(event.getPlace()),
                 event.getEventName(),
                 event.getEventStatus(),
                 event.getEventStartDatetime(),

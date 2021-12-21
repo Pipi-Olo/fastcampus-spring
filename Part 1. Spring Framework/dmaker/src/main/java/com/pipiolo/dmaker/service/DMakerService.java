@@ -1,6 +1,6 @@
 package com.pipiolo.dmaker.service;
 
-import com.pipiolo.dmaker.code.StatusCode;
+import com.pipiolo.dmaker.constant.StatusCode;
 import com.pipiolo.dmaker.dto.CreateDeveloper;
 import com.pipiolo.dmaker.dto.DeveloperDetailDto;
 import com.pipiolo.dmaker.dto.DeveloperDto;
@@ -10,9 +10,8 @@ import com.pipiolo.dmaker.entity.RetiredDeveloper;
 import com.pipiolo.dmaker.exception.DMakerException;
 import com.pipiolo.dmaker.repository.DeveloperRepository;
 import com.pipiolo.dmaker.repository.RetiredDeveloperRepository;
-import com.pipiolo.dmaker.type.DeveloperLevel;
+import com.pipiolo.dmaker.constant.DeveloperLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,13 +24,6 @@ import static com.pipiolo.dmaker.exception.DMakerErrorCode.*;
 @Service
 @RequiredArgsConstructor
 public class DMakerService {
-
-    /**
-     * @Autowired : 과거에 Repository Bean 설정시 사용했던 방법 현재는 잘 사용하지 않는다.
-     *              -> Annotation 종속적인 개발, Test 환경시 불편
-     *
-     * 생성자 : final + @RequiredArgsConstructor 를 통해 Bean 주입받는다.
-     */
 
     private final DeveloperRepository developerRepository;
     private final RetiredDeveloperRepository retiredDeveloperRepository;
@@ -114,7 +106,6 @@ public class DMakerService {
      *
      * @Transactional : Atomic, 1. 2. 중간에 Error 발생하면, Rollback
      */
-
     @Transactional
     public DeveloperDetailDto deleteDeveloper(String memberId) {
 
@@ -137,7 +128,6 @@ public class DMakerService {
      * Business Validation
      * @NotNull : Null-safety
      */
-
     private void validateCreateDeveloperRequest(@NotNull CreateDeveloper.Request request) {
         validateDeveloperLevel(request.getDeveloperLevel(), request.getExperienceYears());
 
@@ -153,7 +143,6 @@ public class DMakerService {
      *                                       에러가 발생한다.
      *                                    -> 10 Years : Magic Number
      */
-
     private void validateDeveloperLevel(DeveloperLevel developerLevel, Integer experienceYears) {
         if (developerLevel == DeveloperLevel.SENIOR
                 && experienceYears < 10) {

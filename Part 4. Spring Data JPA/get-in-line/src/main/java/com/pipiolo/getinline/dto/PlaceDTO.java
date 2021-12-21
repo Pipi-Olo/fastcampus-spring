@@ -5,7 +5,7 @@ import com.pipiolo.getinline.domain.Place;
 
 import java.time.LocalDateTime;
 
-public record PlaceDto(
+public record PlaceDTO(
         Long id,
         PlaceType placeType,
         String placeName,
@@ -17,7 +17,11 @@ public record PlaceDto(
         LocalDateTime modifiedAt
 ) {
 
-    public static PlaceDto of(
+    public static PlaceDTO idOnly(Long id) {
+        return PlaceDTO.of(id, null, null, null, null, null, null, null, null);
+    }
+
+    public static PlaceDTO of(
             Long id,
             PlaceType placeType,
             String placeName,
@@ -28,11 +32,11 @@ public record PlaceDto(
             LocalDateTime createdAt,
             LocalDateTime modifiedAt
     ) {
-        return new PlaceDto(id, placeType, placeName, address, phoneNumber, capacity, memo, createdAt, modifiedAt);
+        return new PlaceDTO(id, placeType, placeName, address, phoneNumber, capacity, memo, createdAt, modifiedAt);
     }
 
-    public static PlaceDto of(Place place) {
-        return new PlaceDto(
+    public static PlaceDTO of(Place place) {
+        return new PlaceDTO(
                 place.getId(),
                 place.getPlaceType(),
                 place.getPlaceName(),

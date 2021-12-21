@@ -1,9 +1,9 @@
 package com.pipiolo.dmaker.dto;
 
 import com.pipiolo.dmaker.entity.Developer;
-import com.pipiolo.dmaker.type.DeveloperLevel;
-import com.pipiolo.dmaker.type.DeveloperSkillType;
-import com.pipiolo.dmaker.code.StatusCode;
+import com.pipiolo.dmaker.constant.DeveloperLevel;
+import com.pipiolo.dmaker.constant.DeveloperSkillType;
+import com.pipiolo.dmaker.constant.StatusCode;
 import lombok.*;
 
 @Setter

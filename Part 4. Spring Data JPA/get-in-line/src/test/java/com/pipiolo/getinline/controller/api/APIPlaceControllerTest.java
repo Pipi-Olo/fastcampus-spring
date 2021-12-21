@@ -18,16 +18,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Deprecated
 @Disabled("API 컨트롤러가 필요없는 상황이어서 비활성화")
 @DisplayName("API 컨트롤러 - 장소")
-@WebMvcTest(ApiPlaceController.class)
-class ApiPlaceControllerTest {
+@WebMvcTest(APIPlaceController.class)
+class APIPlaceControllerTest {
 
     private final MockMvc mvc;
     private final ObjectMapper mapper;
 
-    public ApiPlaceControllerTest(
+    public APIPlaceControllerTest(
             @Autowired MockMvc mvc,
             @Autowired ObjectMapper mapper
-            ) {
+    ) {
         this.mvc = mvc;
         this.mapper = mapper;
     }
@@ -58,6 +58,7 @@ class ApiPlaceControllerTest {
     void givenPlace_whenCreatingAPlace_thenReturnsSuccessfulStandardResponse() throws Exception {
         // Given
         PlaceRequest placeRequest = PlaceRequest.of(
+                null,
                 PlaceType.COMMON,
                 "랄라배드민턴장",
                 "서울시 강남구 강남대로 1234",
@@ -68,10 +69,10 @@ class ApiPlaceControllerTest {
 
         // When & Then
         mvc.perform(
-                post("/api/places")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(placeRequest))
-        )
+                        post("/api/places")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(placeRequest))
+                )
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(true))
@@ -123,6 +124,7 @@ class ApiPlaceControllerTest {
         // Given
         long placeId = 1L;
         PlaceRequest placeRequest = PlaceRequest.of(
+                null,
                 PlaceType.COMMON,
                 "랄라배드민턴장",
                 "서울시 강남구 강남대로 1234",
@@ -133,10 +135,10 @@ class ApiPlaceControllerTest {
 
         // When & Then
         mvc.perform(
-                put("/api/places/" + placeId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(placeRequest))
-        )
+                        put("/api/places/" + placeId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(placeRequest))
+                )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(true))
