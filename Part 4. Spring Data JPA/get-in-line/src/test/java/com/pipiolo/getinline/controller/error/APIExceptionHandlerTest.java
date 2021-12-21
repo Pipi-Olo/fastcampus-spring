@@ -1,7 +1,7 @@
 package com.pipiolo.getinline.controller.error;
 
 import com.pipiolo.getinline.constant.ErrorCode;
-import com.pipiolo.getinline.dto.ApiErrorResponse;
+import com.pipiolo.getinline.dto.APIErrorResponse;
 import com.pipiolo.getinline.exception.GeneralException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,14 +30,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @DisplayName("핸들러 - API 에러 처리")
-class ApiExceptionHandlerTest {
+class APIExceptionHandlerTest {
 
-    private ApiExceptionHandler sut;
+    private APIExceptionHandler sut;
     private WebRequest webRequest;
 
     @BeforeEach
     void setUp() {
-        sut = new ApiExceptionHandler();
+        sut = new APIExceptionHandler();
         webRequest = new DispatcherServletWebRequest(new MockHttpServletRequest());
     }
 
@@ -52,7 +52,7 @@ class ApiExceptionHandlerTest {
 
         // Then
         assertThat(response)
-                .hasFieldOrPropertyWithValue("body", ApiErrorResponse.of(false, ErrorCode.VALIDATION_ERROR, e))
+                .hasFieldOrPropertyWithValue("body", APIErrorResponse.of(false, ErrorCode.VALIDATION_ERROR, e))
                 .hasFieldOrPropertyWithValue("headers", HttpHeaders.EMPTY)
                 .hasFieldOrPropertyWithValue("statusCode", HttpStatus.BAD_REQUEST);
     }
@@ -69,7 +69,7 @@ class ApiExceptionHandlerTest {
 
         // Then
         assertThat(response)
-                .hasFieldOrPropertyWithValue("body", ApiErrorResponse.of(false, errorCode, e))
+                .hasFieldOrPropertyWithValue("body", APIErrorResponse.of(false, errorCode, e))
                 .hasFieldOrPropertyWithValue("headers", HttpHeaders.EMPTY)
                 .hasFieldOrPropertyWithValue("statusCode", HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -87,7 +87,7 @@ class ApiExceptionHandlerTest {
 
         // Then
         assertThat(response)
-                .hasFieldOrPropertyWithValue("body", ApiErrorResponse.of(false, errorCode, e))
+                .hasFieldOrPropertyWithValue("body", APIErrorResponse.of(false, errorCode, e))
                 .hasFieldOrPropertyWithValue("headers", headers)
                 .hasFieldOrPropertyWithValue("statusCode", httpStatus)
                 .extracting(ResponseEntity::getBody)
@@ -117,7 +117,7 @@ class ApiExceptionHandlerTest {
 
         // Then
         assertThat(response)
-                .hasFieldOrPropertyWithValue("body", ApiErrorResponse.of(false, ErrorCode.INTERNAL_ERROR, e))
+                .hasFieldOrPropertyWithValue("body", APIErrorResponse.of(false, ErrorCode.INTERNAL_ERROR, e))
                 .hasFieldOrPropertyWithValue("headers", HttpHeaders.EMPTY)
                 .hasFieldOrPropertyWithValue("statusCode", HttpStatus.INTERNAL_SERVER_ERROR);
     }
