@@ -1,12 +1,16 @@
 package com.pipiolo.getinline.controller;
 
-import com.pipiolo.getinline.dto.PlaceDto;
+import com.pipiolo.getinline.config.SecurityConfig;
+import com.pipiolo.getinline.dto.PlaceDTO;
 import com.pipiolo.getinline.service.PlaceService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -20,7 +24,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("View 컨트롤러 - 장소")
-@WebMvcTest(PlaceController.class)
+@WebMvcTest(
+        controllers = PlaceController.class,
+        excludeAutoConfiguration = SecurityAutoConfiguration.class,
+        excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
+)
 class PlaceControllerTest {
 
     private final MockMvc mvc;
@@ -53,7 +61,7 @@ class PlaceControllerTest {
         // Given
         long placeId = 1L;
         given(placeService.getPlace(placeId)).willReturn(Optional.of(
-                PlaceDto.of(null, null, null, null, null, null, null, null, null)
+                PlaceDTO.of(null, null, null, null, null, null, null, null, null)
         ));
 
         // When & Then

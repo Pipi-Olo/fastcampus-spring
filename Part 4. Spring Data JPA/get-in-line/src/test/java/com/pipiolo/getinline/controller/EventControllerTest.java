@@ -1,12 +1,16 @@
 package com.pipiolo.getinline.controller;
 
-import com.pipiolo.getinline.dto.EventDto;
+import com.pipiolo.getinline.config.SecurityConfig;
+import com.pipiolo.getinline.dto.EventDTO;
 import com.pipiolo.getinline.service.EventService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -20,7 +24,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("View 컨트롤러 - 이벤트")
-@WebMvcTest(EventController.class)
+@WebMvcTest(
+        controllers = EventController.class,
+        excludeAutoConfiguration = SecurityAutoConfiguration.class,
+        excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
+)
 class EventControllerTest {
 
     private final MockMvc mvc;
@@ -53,7 +61,7 @@ class EventControllerTest {
         // Given
         long eventId = 1L;
         given(eventService.getEvent(eventId)).willReturn(Optional.of(
-                EventDto.of(eventId, null, null, null, null, null, null, null, null, null, null)
+                EventDTO.of(eventId, null, null, null, null, null, null, null, null, null, null)
         ));
 
         // When & Then

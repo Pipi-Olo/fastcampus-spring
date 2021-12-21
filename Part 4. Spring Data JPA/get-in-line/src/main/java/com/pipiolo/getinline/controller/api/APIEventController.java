@@ -1,10 +1,9 @@
 package com.pipiolo.getinline.controller.api;
 
 import com.pipiolo.getinline.constant.EventStatus;
+import com.pipiolo.getinline.constant.PlaceType;
+import com.pipiolo.getinline.dto.*;
 import com.pipiolo.getinline.dto.APIDataResponse;
-import com.pipiolo.getinline.dto.APIDataResponse;
-import com.pipiolo.getinline.dto.EventRequest;
-import com.pipiolo.getinline.dto.EventResponse;
 import com.pipiolo.getinline.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -41,21 +40,36 @@ public class APIEventController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDatetime,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDatetime
     ) {
-        List<EventResponse> eventResponses = eventService.getEvents(
-                placeId,
-                eventName,
-                eventStatus,
-                eventStartDatetime,
-                eventEndDatetime
-        ).stream().map(EventResponse::from).toList();
-
-        return APIDataResponse.of(eventResponses);
+        return APIDataResponse.of(List.of(EventResponse.of(
+                1L,
+                PlaceDTO.of(
+                        1L,
+                        PlaceType.SPORTS,
+                        "배드민턴장",
+                        "서울시 가나구 다라동",
+                        "010-1111-2222",
+                        0,
+                        null,
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
+                ),
+                "오후 운동",
+                EventStatus.OPENED,
+                LocalDateTime.of(2021, 1, 1, 13, 0, 0),
+                LocalDateTime.of(2021, 1, 1, 16, 0, 0),
+                0,
+                24,
+                "마스크 꼭 착용하세요"
+        )));
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/events")
-    public APIDataResponse<String> createEvent(@Valid @RequestBody EventRequest eventRequest) {
-        boolean result = eventService.createEvent(eventRequest.toDTO());
+    @PostMapping("/place/{placeId}/events")
+    public APIDataResponse<String> createEvent(
+            @Valid @RequestBody EventRequest eventRequest,
+            @PathVariable Long placeId
+    ) {
+        boolean result = eventService.createEvent(eventRequest.toDTO(PlaceDTO.idOnly(placeId)));
 
         return APIDataResponse.of(Boolean.toString(result));
     }
@@ -72,7 +86,7 @@ public class APIEventController {
             @Positive @PathVariable Long eventId,
             @Valid @RequestBody EventRequest eventRequest
     ) {
-        boolean result = eventService.modifyEvent(eventId, eventRequest.toDTO());
+        boolean result = eventService.modifyEvent(eventId, eventRequest.toDTO(null));
         return APIDataResponse.of(Boolean.toString(result));
     }
 
