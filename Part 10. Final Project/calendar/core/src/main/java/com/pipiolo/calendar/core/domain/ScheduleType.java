@@ -1,4 +1,4 @@
-package com.pipiolo.calendar.core.domain.entity;
+package com.pipiolo.calendar.core.domain;
 
 public enum ScheduleType {
     TASK, NOTIFICATION, EVENT

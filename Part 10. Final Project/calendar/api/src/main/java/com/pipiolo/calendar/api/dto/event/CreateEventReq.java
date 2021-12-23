@@ -1,4 +1,4 @@
-package com.pipiolo.calendar.api.dto;
+package com.pipiolo.calendar.api.dto.event;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class EventCreateRequest {
+public class CreateEventReq {
     private final String title;
     private final String description;
     private final LocalDateTime startAt;
