@@ -3,6 +3,8 @@ package com.pipiolo.calendar.core.service;
 import com.pipiolo.calendar.core.domain.entity.User;
 import com.pipiolo.calendar.core.domain.repository.UserRepository;
 import com.pipiolo.calendar.core.dto.UserCreateRequest;
+import com.pipiolo.calendar.core.excpetion.CalendarException;
+import com.pipiolo.calendar.core.excpetion.ErrorCode;
 import com.pipiolo.calendar.core.util.Encryptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,7 @@ public class UserService {
     public User create(UserCreateRequest request) {
         userRepository.findByEmail(request.getEmail())
                 .ifPresent(user -> {
-                    throw new RuntimeException("user already existed!");
+                    throw new CalendarException(ErrorCode.USER_NOT_FOUND);
                 });
 
         return userRepository.save(User.builder()
@@ -40,6 +42,6 @@ public class UserService {
     @Transactional
     public User findByUserId(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("No user by id. "));
+                .orElseThrow(() -> new CalendarException(ErrorCode.USER_NOT_FOUND));
     }
 }

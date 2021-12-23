@@ -1,6 +1,6 @@
 package com.pipiolo.calendar.api.config;
 
-import com.pipiolo.calendar.api.dto.AuthUser;
+import com.pipiolo.calendar.api.dto.user.AuthUser;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;

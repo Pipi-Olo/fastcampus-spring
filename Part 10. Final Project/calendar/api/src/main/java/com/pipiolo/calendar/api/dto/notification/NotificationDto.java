@@ -1,6 +1,7 @@
-package com.pipiolo.calendar.api.dto;
+package com.pipiolo.calendar.api.dto.notification;
 
-import com.pipiolo.calendar.core.domain.entity.ScheduleType;
+import com.pipiolo.calendar.api.dto.ScheduleDto;
+import com.pipiolo.calendar.core.domain.ScheduleType;
 import lombok.Data;
 
 import java.time.LocalDateTime;

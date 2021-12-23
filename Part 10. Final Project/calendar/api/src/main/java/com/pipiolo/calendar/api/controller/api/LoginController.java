@@ -1,7 +1,7 @@
 package com.pipiolo.calendar.api.controller.api;
 
-import com.pipiolo.calendar.api.dto.LoginRequest;
-import com.pipiolo.calendar.api.dto.SignupRequest;
+import com.pipiolo.calendar.api.dto.user.LoginRequest;
+import com.pipiolo.calendar.api.dto.user.SignupRequest;
 import com.pipiolo.calendar.api.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 
 @RequiredArgsConstructor
 @RestController
-public class LoginApiController {
+public class LoginController {
 
     private final LoginService loginService;
 

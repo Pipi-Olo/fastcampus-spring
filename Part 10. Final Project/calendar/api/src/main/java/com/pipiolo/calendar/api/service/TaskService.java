@@ -1,7 +1,7 @@
 package com.pipiolo.calendar.api.service;
 
-import com.pipiolo.calendar.api.dto.AuthUser;
-import com.pipiolo.calendar.api.dto.TaskCreateRequest;
+import com.pipiolo.calendar.api.dto.user.AuthUser;
+import com.pipiolo.calendar.api.dto.task.CreateTaskReq;
 import com.pipiolo.calendar.core.domain.entity.Schedule;
 import com.pipiolo.calendar.core.domain.repository.ScheduleRepository;
 import com.pipiolo.calendar.core.service.UserService;
@@ -17,7 +17,7 @@ public class TaskService {
     private final ScheduleRepository scheduleRepository;
 
     @Transactional
-    public void create(TaskCreateRequest request, AuthUser authUser) {
+    public void create(CreateTaskReq request, AuthUser authUser) {
         final Schedule taskSchedule = Schedule.task(
                 request.getTaskAt(),
                 request.getTitle(),

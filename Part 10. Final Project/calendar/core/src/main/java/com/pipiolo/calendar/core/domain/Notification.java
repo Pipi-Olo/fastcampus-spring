@@ -19,4 +19,8 @@ public class Notification {
     public Notification(Schedule schedule) {
         this.schedule = schedule;
     }
+
+    public User getWriter() {
+        return this.schedule.getWriter();
+    }
 }

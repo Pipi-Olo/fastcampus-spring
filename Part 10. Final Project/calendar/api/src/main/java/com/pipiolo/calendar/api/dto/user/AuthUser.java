@@ -1,4 +1,4 @@
-package com.pipiolo.calendar.api.dto;
+package com.pipiolo.calendar.api.dto.user;
 
 import lombok.Getter;
 
