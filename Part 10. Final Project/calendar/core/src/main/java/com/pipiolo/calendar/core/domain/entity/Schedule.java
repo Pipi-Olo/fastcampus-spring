@@ -2,12 +2,16 @@ package com.pipiolo.calendar.core.domain.entity;
 
 import com.pipiolo.calendar.core.domain.Event;
 import com.pipiolo.calendar.core.domain.Notification;
+import com.pipiolo.calendar.core.domain.ScheduleType;
 import com.pipiolo.calendar.core.domain.Task;
+import com.pipiolo.calendar.core.util.Period;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@ToString
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -70,5 +74,13 @@ public class Schedule extends BaseEntity {
 
     public Notification toNotification() {
         return new Notification(this);
+    }
+
+    public boolean isOverlapped(LocalDate date) {
+        return Period.of(this.getStartAt(), this.getEndAt()).isOverlapped(date);
+    }
+
+    public boolean isOverlapped(Period period) {
+        return Period.of(this.getStartAt(), this.getEndAt()).isOverlapped(period);
     }
 }
