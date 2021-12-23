@@ -1,6 +1,6 @@
-package com.pipiolo.calendar.api.dto;
+package com.pipiolo.calendar.api.dto.notification;
 
-import com.pipiolo.calendar.core.util.TimeUnit;
+import com.pipiolo.calendar.core.domain.type.TimeUnit;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Data
-public class NotificationCreateRequest {
+public class CreateNotificationReq {
     private final String title;
     private final LocalDateTime notifyAt;
     private final RepeatInfo repeatInfo;

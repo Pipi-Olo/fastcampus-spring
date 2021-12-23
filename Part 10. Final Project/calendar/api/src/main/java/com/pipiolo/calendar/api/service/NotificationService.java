@@ -1,7 +1,7 @@
 package com.pipiolo.calendar.api.service;
 
-import com.pipiolo.calendar.api.dto.AuthUser;
-import com.pipiolo.calendar.api.dto.NotificationCreateRequest;
+import com.pipiolo.calendar.api.dto.user.AuthUser;
+import com.pipiolo.calendar.api.dto.notification.CreateNotificationReq;
 import com.pipiolo.calendar.core.domain.entity.Schedule;
 import com.pipiolo.calendar.core.domain.entity.User;
 import com.pipiolo.calendar.core.domain.repository.ScheduleRepository;
@@ -21,7 +21,7 @@ public class NotificationService {
     private final ScheduleRepository scheduleRepository;
 
     @Transactional
-    public void create(NotificationCreateRequest request, AuthUser authUser) {
+    public void create(CreateNotificationReq request, AuthUser authUser) {
         final User user = userService.findByUserId(authUser.getId());
 
         final List<LocalDateTime> notifyAtList = request.getRepeatTimes();

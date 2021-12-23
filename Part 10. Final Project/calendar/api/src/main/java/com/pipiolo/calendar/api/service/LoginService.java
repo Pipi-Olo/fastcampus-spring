@@ -1,7 +1,7 @@
 package com.pipiolo.calendar.api.service;
 
-import com.pipiolo.calendar.api.dto.LoginRequest;
-import com.pipiolo.calendar.api.dto.SignupRequest;
+import com.pipiolo.calendar.api.dto.user.LoginRequest;
+import com.pipiolo.calendar.api.dto.user.SignupRequest;
 import com.pipiolo.calendar.core.domain.entity.User;
 import com.pipiolo.calendar.core.dto.UserCreateRequest;
 import com.pipiolo.calendar.core.service.UserService;
