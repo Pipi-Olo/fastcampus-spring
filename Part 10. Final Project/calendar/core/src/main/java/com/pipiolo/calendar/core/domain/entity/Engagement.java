@@ -2,6 +2,7 @@ package com.pipiolo.calendar.core.domain.entity;
 
 import com.pipiolo.calendar.core.domain.Event;
 import com.pipiolo.calendar.core.domain.RequestStatus;
+import com.pipiolo.calendar.core.domain.ScheduleType;
 import com.pipiolo.calendar.core.domain.type.RequestReplyType;
 import com.pipiolo.calendar.core.util.Period;
 import lombok.Builder;
@@ -27,6 +28,13 @@ public class Engagement extends BaseEntity {
 
     @Enumerated(value = EnumType.STRING)
     private RequestStatus requestStatus;
+
+    public Engagement(Schedule eventSchedule, User attendee) {
+        assert eventSchedule.getScheduleType() == ScheduleType.EVENT;
+        this.schedule = eventSchedule;
+        this.requestStatus = RequestStatus.REQUESTED;
+        this.attendee = attendee;
+    }
 
     public Event getEvent() {
         return schedule.toEvent();

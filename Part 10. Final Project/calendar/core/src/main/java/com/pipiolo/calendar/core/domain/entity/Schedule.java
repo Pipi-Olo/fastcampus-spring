@@ -34,7 +34,13 @@ public class Schedule extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ScheduleType scheduleType;
 
-    public static Schedule event(LocalDateTime startAt, LocalDateTime endAt, String title, String description, User writer) {
+    public static Schedule event(
+            String title,
+            String description,
+            LocalDateTime startAt,
+            LocalDateTime endAt,
+            User writer
+    ) {
         return Schedule.builder()
                 .startAt(startAt)
                 .endAt(endAt)
@@ -45,7 +51,12 @@ public class Schedule extends BaseEntity {
                 .build();
     }
 
-    public static Schedule task(LocalDateTime taskAt, String title, String description, User writer) {
+    public static Schedule task(
+            LocalDateTime taskAt,
+            String title,
+            String description,
+            User writer
+    ) {
         return Schedule.builder()
                 .startAt(taskAt)
                 .title(title)
@@ -55,7 +66,11 @@ public class Schedule extends BaseEntity {
                 .build();
     }
 
-    public static Schedule notification(LocalDateTime notifyAt, String title, User writer) {
+    public static Schedule notification(
+            LocalDateTime notifyAt,
+            String title,
+            User writer
+    ) {
         return Schedule.builder()
                 .startAt(notifyAt)
                 .title(title)
